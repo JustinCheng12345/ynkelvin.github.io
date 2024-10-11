@@ -337,7 +337,10 @@ $( document ).ready(function() {
 			} else {
 				$("#transferModal #ftl").val(ftl);
 			}
-		})
+		});
+		transferModal.addEventListener('hide.bs.modal', event => {
+			$("#footer_acid").val("");
+		});
 	}
 
 	var keyPressed = {};

@@ -30,6 +30,7 @@
 		.col-7,
 		.col-10,
 		.card-body,
+		.card-footer,
 		.efs-btn {
 			padding: 0;
 			margin: 0;
@@ -188,11 +189,13 @@
 		<div class="card-footer">
 			<div class="container-fluid text-center font-monospace bg-info h-100" data-bs-theme="dark">
 				<div class="row">
+					<div class="col-3"></div>
+					<div class="col-1"><span class="fs-5">1145</span>30</div>
 					<div class="col"></div>
-					<div class="col"><span class="fs-5">1145</span>30</div>
-					<div class="col"><input type="text" class="form-control" aria-label="footer_acid"
+					<div class="col-1"><input type="text" class="form-control" aria-label="footer_acid"
 						aria-describedby="inputGroup-sizing-sm" maxlength="7" id="footer_acid" oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');"></div>
-					<div class="col">
+					<div class="col"></div>
+					<div class="col-2">
 						<button type="button" class="btn btn-primary btn-sm" onclick="startExercise(10)">New
 							Exercise</button>
 						<button type="button" class="btn btn-primary btn-sm">Check</button>
