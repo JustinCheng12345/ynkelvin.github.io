@@ -486,7 +486,7 @@ function showFlow() {
 	$("#flowModal").modal('hide');
 	if (!($('.modal.in').length)) {
 		$('#flowModal .modal-dialog').css({
-			top: 10,
+			top: 50,
 			left: 10
 		});
 	}
