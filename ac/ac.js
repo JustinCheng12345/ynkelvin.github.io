@@ -1,8 +1,14 @@
+keyPressed = {};
+
 // Generate EFS
 callsign = ["AIQ", "APG", "AXM", "BAV", "BGB", "CAL", "CCA", "CHH", "CPA", "CQH", "CRK", "CSC", "CSN", "CSS", "CSZ", "CXA", "EVA", "GIA", "HGB", "HKC", "HKE", "HVN", "HZS", "JAL", "JJA", "JNA", "KAL", "KME", "KMI", "KXP", "LNI", "MGL", "MKR", "MYU", "RLH", "SJX", "SLK", "SWM", "TTW", "TVJ", "UAE", "UPS", "WCM"];
 
 //level_SR = { "110": 0.01, "120": 0.29, "170": 0.05, "190": 0.1, "210": 0.1, "230": 0.2, "250": 0.2, "270": 0.05 };
 //level_LD = { "A090": 0.1, "F110": 0.9 };
+
+level = {};
+separation = [];
+fatal = [];
 
 dest_list = {
 	"ENVAR": ["RCTP", "RCKH", "RJAA", "RJGG", "RJCC", "KSFO", "CYVR"],
@@ -84,16 +90,51 @@ function genFlight(time) {
 
 // Functions
 
+function resetRules(){
+	// set rules
+	level = {
+		"SR_ZGSZ": ["120"],
+		"SR_VHHH": ["190", "210", "230"],
+		"SR_other": ["230", "250"]
+	};
+
+	level_yellow = {
+		"SR_ZGSZ": ["110"],
+		"SR_VHHH": ["170", "250"],
+		"SR_other": ["210", "270"]
+	};
+
+	separation = [
+		{flow: false, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "20NM"},
+		//{flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "7"},
+		//{flow: true, both: true, dep: "MAINLAND", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "7"},
+		{flow: false, both: false, dep: "", dep_not: "ZGSZ", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "16NM"},
+		{flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "5NM"},
+		{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "VHHH", in_fix: "SIERA", out_fix: "", sep: "30NM"},
+		{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "ELATO", sep: "10"},
+		{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "ENVAR", sep: "10"},
+		{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "NOMAN", sep: "10"},
+		{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "SABNO", sep: "10"},
+		{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "EPKAL", sep: "10"},
+		{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "IKELA", sep: "10"},
+
+	];
+}
+
 function startExercise(num) {
+
+	resetRules();
+
 	flights = [];
 
-	times = [720];
+	initTime = Math.floor(Math.random() * 1340);
+	$("#clock").html(`<span class="fs-5">${showTime(initTime)}</span>00`)
+
+	times = [initTime + 15];
 
 	for (i = 0; i < num - 1; i++) {
 		times.push(Number(times.slice(-1)) + Math.floor(Math.random() * 5) + 1);
-	}
-
-	//times = [1130,1135,1140,1145,1150,1155,1200,1205,1210,1215];
+	};
 
 	times.forEach(element => {
 		genFlight(element);
@@ -120,6 +161,29 @@ function clickACID(acid) {
 	}
 }
 
+function openRbox(acid) {
+
+	flight = flights.find( (item) => (item.acid==acid) );
+	rbox = flight?flight.rbox:"";
+
+	$("#rboxModal #rboxModalLabel").html(`Annotation - ${acid}`);
+	$("#rboxModal #acid").val(acid);
+	$("#rboxModal #rbox").val(rbox);
+
+	$("#rboxModal").modal('hide');
+	if (!($('.modal.in').length)) {
+		$('.modal-dialog').css({
+			top: 300,
+			left: 300
+		});
+	}
+	$("#rboxModal").modal('show');
+
+	$('.modal-dialog').draggable({
+	handle: ".modal-header"
+	});
+}
+
 function lightup(acid, fix) {
 	flights.find((o, i) => {
 		if (o.acid === acid) {
@@ -140,7 +204,7 @@ function lightup(acid, fix) {
 	drawBoard(fix);
 }
 
-function updateTransfer(closeModal){
+function updateTransfer(closeModal) {
 	fix = "";
 	const transferModal = $('#transferModal');
 	const acidInput = $('#transferModal #acid').val();
@@ -166,6 +230,175 @@ function updateTransfer(closeModal){
 	} else {
 		$('#transferModal #time').addClass("is-invalid");
 	}
+}
+
+function updateRbox(closeModal) {
+	fix = "";
+	const rboxModal = $('#rboxModal');
+	const acidInput = $('#rboxModal #acid').val();
+	const rboxInput = $('#rboxModal #rbox').val();
+	
+	flights.find((o, i) => {
+		if (o.acid === acidInput) {
+			flights[i].rbox = rboxInput;
+			fix = flights[i].in_fix;
+			return true; // stop searching
+		}
+	});
+
+	drawBoard(fix);
+
+	if (closeModal) {
+		$('#rboxModal').modal('hide');
+	}
+}
+
+function isMainland(ad) {
+	return ( ad.startsWith("Z") && !ad.startsWith("ZK") && !ad.startsWith("ZM") && !ad.startsWith("ZGSZ") );
+}
+
+function checkLevel(flight, traffic) {
+	if (level[traffic].includes(flight.fl)){
+		if (flight.fl_light === ""){
+			return true;
+		}
+		fatal.push(flight.acid + " level incorrect");
+		return false;
+	} 
+
+	if (level_yellow[traffic].includes(flight.fl)){
+		if (flight.fl_light === "bg-warning"){
+			return true;
+		}
+		fatal.push(flight.acid + " level incorrect");
+		return false;
+	} 
+
+	if (flight.fl_light === "bg-danger"){
+		return true;
+	} 
+	fatal.push(flight.acid + " level incorrect");
+	return false;
+
+}
+
+function checkSeparationApply(both, neg, field, data1, data2) {
+	if (field === "") return true;
+	if (neg) {
+		if (both) {
+			if (field === "MAINLAND"){
+				return !isMainland(data1) && !isMainland(data2);
+			} else {
+				return field !== data1 && field !== data2;
+			}
+		} else {
+			if (field === "MAINLAND"){
+				return !isMainland(data1) || !isMainland(data2);
+			} else {
+				return field !== data1 || field !== data2;
+			}
+		}
+	} else {
+		if (both) {
+			if (field === "MAINLAND"){
+				return isMainland(data1) && isMainland(data2);
+			} else {
+				return field === data1 && field === data2;
+			}
+		} else {
+			if (field === "MAINLAND"){
+				return isMainland(data1) || isMainland(data2);
+			} else {
+				return field === data1 || field === data2;
+			}
+		}
+	}
+}
+
+
+function checkSeparation(flight1, flight2) {
+	const rules = separation.filter((r) => 
+		(r.flow || flight1.fl === flight2.fl) && 
+		checkSeparationApply(r.both, false, r.dep, flight1.dep, flight2.dep) &&
+		checkSeparationApply(r.both, true, r.dep_not, flight1.dep, flight2.dep) &&
+		checkSeparationApply(r.both, false, r.dest, flight1.dest, flight2.dest) &&
+		checkSeparationApply(r.both, true, r.dest_not, flight1.dest, flight2.dest) &&
+		checkSeparationApply(r.both, false, r.in_fix, flight1.in_fix, flight2.in_fix) &&
+		checkSeparationApply(r.both, false, r.out_fix, flight1.out_fix, flight2.out_fix)
+	);
+
+	required = rules.map(d => d.sep);
+
+	required.forEach(s => {
+		if (s.endsWith("NM")){
+			sep = Math.ceil(s.substr(0, s.length-2)/8);
+			if (flight1.fix_est-flight2.fix_est == sep){
+				if (flight1.rbox !== flight2.acid + "+" + s){
+					fatal.push(flight1.acid + " & " + flight2.acid + " no ensure");
+				}
+			} else if (flight1.fix_est-flight2.fix_est < sep){
+				fatal.push(flight1.acid + " & " + flight2.acid + " not enough separation");
+			}
+		} else {
+			sep = Number(s);
+			if (flight1.fix_est-flight2.fix_est < sep){
+				fatal.push(flight1.acid + " & " + flight2.acid + " not enough separation");
+			}
+		}
+
+	});
+	
+	//console.log(flight1.acid, flight2.acid, rules.map(d => d.sep));
+}
+
+function checkAnswer() {
+	fatal = [];
+
+	flights.forEach(flight => {
+		if (flight.in_fix === "SIERA") {
+			if (flight.dep === "ZGSZ") {
+				checkLevel(flight, "SR_ZGSZ");
+			} else if (flight.dest === "VHHH") {
+				checkLevel(flight, "SR_VHHH");
+			} else {
+				checkLevel(flight, "SR_other");
+			}
+		}
+	});
+
+	for (let i = 1; i < flights.length; i++) {
+		for (let j = i-1; j >= 0; j--) {
+			if ((flights[i].in_fix === "SIERA" && flights[i].fl === "270") || (flights[j].in_fix === "SIERA" && flights[j].fl === "270")) continue;
+			checkSeparation(flights[i], flights[j]);
+		}
+	}
+
+	faultHTML = ""
+
+	fatal.forEach(f => {
+		//console.log(f);
+		faultHTML += `<li>${f}</li>`;
+	});
+
+	if (faultHTML === "") {
+		faultHTML = `<li>PASSSSSSSSSSSS</li>`;
+	}
+
+	$("#faultList").html(faultHTML);
+
+
+	$("#faultModal").modal('hide');
+	if (!($('.modal.in').length)) {
+		$('.modal-dialog').css({
+			top: 300,
+			left: 300
+		});
+	}
+	$("#faultModal").modal('show');
+
+	$('.modal-dialog').draggable({
+	handle: ".modal-header"
+	});
 }
 
 // Draw EFS
@@ -238,7 +471,7 @@ function drawIB(fix, flight) {
                             <div class="col-2 border border-black">${showTime(flight.fix_est)}</div>
                             <div class="col-3 border border-black text-start">${flight.rbox}</div>
                             <div class="col-1 border border-black">${flight.dep}</div>
-                            <div class="col-1 border border-black">R</div>
+                            <div class="col-1 border border-black" onclick="openRbox('${flight.acid}')">R</div>
                         </div>
                     </div>
                 </div>
@@ -271,7 +504,7 @@ function drawOVF(fix, flight) {
                             <div class="col-2 border border-black">${flight.rvsm}</div>
                             <div class="col-2 border border-black">${showTime(flight.fix_est)}</div>
                             <div class="col-4 border border-black text-start">${flight.rbox}</div>
-                            <div class="col-1 border border-black">R</div>
+                            <div class="col-1 border border-black" onclick="openRbox('${flight.acid}')">R</div>
                         </div>
                     </div>
                 </div>
@@ -338,12 +571,20 @@ $( document ).ready(function() {
 				$("#transferModal #ftl").val(ftl);
 			}
 		});
-		transferModal.addEventListener('hide.bs.modal', event => {
-			$("#footer_acid").val("");
-		});
+		
 	}
 
-	var keyPressed = {};
+	const rboxModal = document.getElementById('rboxModal');
+	if (rboxModal) {
+		rboxModal.addEventListener('show.bs.modal', event => {
+			// Button that triggered the modal
+			//const button = event.relatedTarget;
+			// Extract info from data-bs-* attributes
+			//const acid = button.getAttribute('data-bs-acid');
+
+		});
+		
+	}
 
 	$(window).keydown(function(e) {
 		keyPressed[e.which] = true;
@@ -353,6 +594,7 @@ $( document ).ready(function() {
 
 	$(window).keydown(function(e) {
 		if (keyPressed[17] && keyPressed[120]) {
+			keyPressed = {};
 			$("#transferModal").modal('hide');
 			if (!($('.modal.in').length)) {
 				$('.modal-dialog').css({
@@ -365,6 +607,8 @@ $( document ).ready(function() {
 			$('.modal-dialog').draggable({
 			handle: ".modal-header"
 			});
+
+			$("#footer_acid").val("");
 		}
 	})
 
