@@ -47,6 +47,7 @@
 
 		#transferModal,
 		#rboxModal,
+		#flowModal,
 		#faultModal {
 			position: relative;
 		}
@@ -200,6 +201,7 @@
 					<div class="col-2">
 						<button type="button" class="btn btn-primary btn-sm" onclick="startExercise(10)">New
 							Exercise</button>
+						<button type="button" class="btn btn-primary btn-sm" onclick="showFlow()">WIB</button>
 						<button type="button" class="btn btn-primary btn-sm" onclick="checkAnswer()">Check Answer</button>
 					</div>
 				</div>
@@ -275,6 +277,35 @@
 		</div>
 	</div>
 
+	<div class="modal" id="flowModal" tabindex="-1" aria-labelledby="flowModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="flowModalLabel">Flow</h1>
+				</div>
+				<div class="modal-body">
+					<table class="table table-bordered" id="flowTable">
+						<thead>
+							<tr>
+								<th scope="col">Restrictions</th>
+								<th scope="col">Flow Control</th>
+								<th scope="col">CFS</th>
+								<th scope="col">Validity</th>
+								<th scope="col">Remarks</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" tabindex="-1" data-bs-dismiss="modal">Roger</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 	<div class="modal" id="faultModal" tabindex="-1" aria-labelledby="faultModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -284,6 +315,8 @@
 				<div class="modal-body">
 					<ul id="faultList">
 					</ul>
+				</div>
+				<div class="modal-footer">
 					<button type="button" class="btn btn-primary" tabindex="-1" data-bs-dismiss="modal">Roger</button>
 				</div>
 			</div>

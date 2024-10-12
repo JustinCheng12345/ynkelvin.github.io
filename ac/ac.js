@@ -8,6 +8,7 @@ callsign = ["AIQ", "APG", "AXM", "BAV", "BGB", "CAL", "CCA", "CHH", "CPA", "CQH"
 
 level = {};
 separation = [];
+flow = [];
 fatal = [];
 
 dest_list = {
@@ -121,9 +122,59 @@ function resetRules(){
 	];
 }
 
+function generateFlow(){
+	nnsb = Math.random() >= 0.3;
+	nnsb_sep = (Math.floor(Math.random() * 10) + 11).toString();
+
+	ekik = Math.random() >= 0.3;
+	ekik_sep = (Math.floor(Math.random() * 10) + 11).toString();
+
+	ldg = Math.random() >= 0.3;
+	ldg_sep = (Math.floor(Math.random() * 5) + 5).toString();
+
+	flow = [
+		{text: "SIERA - NOMAN", sep: nnsb_sep, cfs: "", validity:"UFN", remarks: "", active: nnsb},
+		{text: "SIERA - SABNO", sep: nnsb_sep, cfs: "", validity:"UFN", remarks: "", active: nnsb},
+		{text: "SIERA - EPKAL", sep: ekik_sep, cfs: "", validity:"UFN", remarks: "", active: ekik},
+		{text: "SIERA - IKELA", sep: ekik_sep, cfs: "", validity:"UFN", remarks: "", active: ekik},
+		{text: "SIERA DEP ZXXX LDG VHHH", sep: ldg_sep, cfs: "", validity:"UFN", remarks: "", active: ldg},
+		{text: "SIERA LDG VHHH F190 N/A", sep: "", cfs: "", validity:"UFN", remarks: "", active: ldg},
+		{text: "SIERA OVF VHHK F250 ONLY", sep: "", cfs: "", validity:"UFN", remarks: "", active: ldg},
+	]
+
+	if (nnsb) {
+		separation.push({flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "NOMAN", sep: nnsb_sep});
+		separation.push({flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "SABNO", sep: nnsb_sep});
+		separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "NOMAN", sep: nnsb_sep});
+		separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "SABNO", sep: nnsb_sep});
+	}
+
+	if (ekik) {
+		separation.push({flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "EPKAL", sep: ekik_sep});
+		separation.push({flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "IKELA", sep: ekik_sep});
+		separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "EPKAL", sep: ekik_sep});
+		separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "IKELA", sep: ekik_sep});
+	}
+
+	if (ldg) {
+		separation.push({flow: true, both: true, dep: "MAINLAND", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: ldg_sep});
+		separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: ldg_sep});
+
+		level["SR_VHHH"] = ["210", "230"];
+		level_yellow["SR_VHHH"].push("190");
+
+		level["SR_other"] = ["250"];
+		level_yellow["SR_other"].push("230");
+	}
+
+
+}
+
 function startExercise(num) {
 
 	resetRules();
+
+	generateFlow();
 
 	flights = [];
 
@@ -141,6 +192,8 @@ function startExercise(num) {
 	});
 
 	drawBoard("SIERA");
+
+	showFlow();
 }
 
 function cloak(acid, side, fix) {
@@ -172,9 +225,9 @@ function openRbox(acid) {
 
 	$("#rboxModal").modal('hide');
 	if (!($('.modal.in').length)) {
-		$('.modal-dialog').css({
+		$('#rboxModal .modal-dialog').css({
 			top: 300,
-			left: 300
+			left: 1000
 		});
 	}
 	$("#rboxModal").modal('show');
@@ -389,8 +442,8 @@ function checkAnswer() {
 
 	$("#faultModal").modal('hide');
 	if (!($('.modal.in').length)) {
-		$('.modal-dialog').css({
-			top: 300,
+		$('#faultModal .modal-dialog').css({
+			top: 500,
 			left: 300
 		});
 	}
@@ -401,6 +454,48 @@ function checkAnswer() {
 	});
 }
 
+function showFlow() {
+	flowHTML = ""
+	flow.forEach(f => {
+		if (f.active){
+			flowHTML += `
+				<tr>
+					<td>${f.text}</td>
+					<td>${f.sep}</td>
+					<td>${f.cfs}</td>
+					<td>${f.validity}</td>
+					<td>${f.remarks}</td>
+				</tr>`;
+		}
+	});
+
+	if (flowHTML === ""){
+		flowHTML = `
+			<tr>
+				<td>Nil</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>`;
+	}
+
+	$("#flowModal tbody").html(flowHTML);
+
+
+	$("#flowModal").modal('hide');
+	if (!($('.modal.in').length)) {
+		$('#flowModal .modal-dialog').css({
+			top: 10,
+			left: 10
+		});
+	}
+	$("#flowModal").modal('show');
+
+	$('.modal-dialog').draggable({
+	handle: ".modal-header"
+	});
+}
 // Draw EFS
 
 function getOS() {
@@ -640,8 +735,8 @@ $( document ).ready(function() {
 			keyPressed = {};
 			$("#transferModal").modal('hide');
 			if (!($('.modal.in').length)) {
-				$('.modal-dialog').css({
-					top: 300,
+				$('#transferModal .modal-dialog').css({
+					top: 600,
 					left: 300
 				});
 			}
