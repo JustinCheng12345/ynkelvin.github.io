@@ -214,6 +214,23 @@ function clickACID(acid) {
 	}
 }
 
+function openTransfer() {
+	$("#transferModal").modal('hide');
+	if (!($('.modal.in').length)) {
+		$('#transferModal .modal-dialog').css({
+			top: 600,
+			left: 300
+		});
+	}
+	$("#transferModal").modal('show');
+
+	$('.modal-dialog').draggable({
+	handle: ".modal-header"
+	});
+
+	$("#footer_acid").val("");
+}
+
 function openRbox(acid) {
 
 	flight = flights.find( (item) => (item.acid==acid) );
@@ -733,20 +750,8 @@ $( document ).ready(function() {
 	$(window).keydown(function(e) {
 		if (keyPressed[17] && keyPressed[120]) {
 			keyPressed = {};
-			$("#transferModal").modal('hide');
-			if (!($('.modal.in').length)) {
-				$('#transferModal .modal-dialog').css({
-					top: 600,
-					left: 300
-				});
-			}
-			$("#transferModal").modal('show');
-
-			$('.modal-dialog').draggable({
-			handle: ".modal-header"
-			});
-
-			$("#footer_acid").val("");
+			
+			openTransfer();
 		}
 	})
 

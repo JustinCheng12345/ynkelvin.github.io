@@ -196,11 +196,14 @@
 					<div class="col-1" id="clock"><span class="fs-5">1145</span>00</div>
 					<div class="col"></div>
 					<div class="col-1"><input type="text" class="form-control" aria-label="footer_acid"
-						aria-describedby="inputGroup-sizing-sm" maxlength="7" id="footer_acid" oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');"></div>
+						aria-describedby="inputGroup-sizing-sm" maxlength="7" id="footer_acid" oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');">
+					</div>
+					<div class="col-1">
+						<button type="button" class="btn btn-primary btn-sm" onclick="openTransfer()">Ctrl+BEst</button>
+					</div>
 					<div class="col"></div>
 					<div class="col-2">
-						<button type="button" class="btn btn-primary btn-sm" onclick="startExercise(10)">New
-							Exercise</button>
+						<button type="button" class="btn btn-primary btn-sm" onclick="startExercise(10)">New Exercise</button>
 						<button type="button" class="btn btn-primary btn-sm" onclick="showFlow()">WIB</button>
 						<button type="button" class="btn btn-primary btn-sm" onclick="checkAnswer()">Check Answer</button>
 					</div>
