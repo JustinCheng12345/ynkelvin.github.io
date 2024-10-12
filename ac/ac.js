@@ -403,23 +403,66 @@ function checkAnswer() {
 
 // Draw EFS
 
+function getOS() {
+	const userAgent = window.navigator.userAgent;
+	const platform =
+	  window.navigator?.userAgentData?.platform || window.navigator.platform;
+	const macosPlatforms = ["Macintosh", "MacIntel", "MacPPC", "Mac68K", "macOS"];
+	const windowsPlatforms = ["Win32", "Win64", "Windows", "WinCE"];
+	const iosPlatforms = ["iPhone", "iPad", "iPod"];
+  
+	if (macosPlatforms.indexOf(platform) !== -1) {
+	  os = "Mac OS";
+	} else if (iosPlatforms.indexOf(platform) !== -1) {
+	  os = "iOS";
+	} else if (windowsPlatforms.indexOf(platform) !== -1) {
+	  os = "Windows";
+	} else if (/Android/.test(userAgent)) {
+	  os = "Android";
+	} else if (/Linux/.test(platform)) {
+	  os = "Linux";
+	}
+  
+	return os;
+  }  
+
 function showDOF(from, to) {
-	// 🡸	🡹	🡺	🡻	🡼	🡽	🡾	🡿
+	// 							
+	if (getOS() === "Mac OS"){
+		w = "←";
+		n = "↑";
+		e = "→";
+		s = "↓";
+		nw = "↖";
+		ne = "↗";
+		se = "↘";
+		sw = "↙";
+	} else {
+		w = "🡸";
+		n = "🡹";
+		e = "🡺";
+		s = "🡻";
+		nw = "🡼";
+		ne = "🡽";
+		se = "🡾";
+		sw = "🡿";
+	}
+	
 	switch (from) {
 		case "SIERA":
 			switch (to) {
 				case "":
-					return "🡽";
+					return ne;
 				case "ENVAR":
-					return "🡺";
+					return e;
 				case "NOMAN":
-					return "🡾";
+					return se;
 				case "SABNO":
-					return "🡾";
+					return se;
 				case "EPKAL":
-					return "🡻";
+					return s;
 				case "IKELA":
-					return "🡿";
+					return sw;
 			}
 			break;
 	}
