@@ -1,7 +1,7 @@
 keyPressed = {};
 
 // Generate EFS
-callsign = ["AIQ", "APG", "AXM", "BAV", "BGB", "CAL", "CCA", "CHH", "CPA", "CQH", "CRK", "CSC", "CSN", "CSS", "CSZ", "CXA", "EVA", "GIA", "HGB", "HKC", "HKE", "HVN", "HZS", "JAL", "JJA", "JNA", "KAL", "KME", "KMI", "KXP", "LNI", "MGL", "MKR", "MYU", "RLH", "SJX", "SLK", "SWM", "TTW", "TVJ", "UAE", "UPS", "WCM"];
+callsign = ["AIQ", "APG", "AXM", "BAV", "BGB", "CAL", "CCA", "CHH", "CPA", "CQH", "CRK", "CSC", "CSN", "CSS", "CSZ", "CTV", "CXA", "EVA", "GIA", "HGB", "HKC", "HKE", "HVN", "HZS", "JAL", "JJA", "JNA", "KAL", "KME", "KMI", "KXP", "LNI", "MGL", "MKR", "MYU", "RLH", "SJX", "SLK", "SWM", "TTW", "TVJ", "UAE", "UPS", "WCM"];
 
 //level_SR = { "110": 0.01, "120": 0.29, "170": 0.05, "190": 0.1, "210": 0.1, "230": 0.2, "250": 0.2, "270": 0.05 };
 //level_LD = { "A090": 0.1, "F110": 0.9 };
@@ -540,7 +540,7 @@ function getOS() {
 
 function showDOF(from, to) {
 	// 							
-	if (getOS() === "Mac OS"){
+	if (getOS() === "Mac OS" || getOS() === "Android"){
 		w = "←";
 		n = "↑";
 		e = "→";
