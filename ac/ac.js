@@ -1,7 +1,7 @@
 keyPressed = {};
 
 // Generate EFS
-callsign = ["AIQ", "APG", "AXM", "BAV", "BGB", "CAL", "CCA", "CHH", "CPA", "CQH", "CRK", "CSC", "CSN", "CSS", "CSZ", "CTV", "CXA", "EVA", "GIA", "HGB", "HKC", "HKE", "HVN", "HZS", "JAL", "JJA", "JNA", "KAL", "KME", "KMI", "KXP", "LHA", "LNI", "MGL", "MKR", "MYU", "RLH", "SJX", "SLK", "SWM", "TTW", "TVJ", "UAE", "UPS", "WCM"];
+callsign = ["AIQ", "APG", "AXM", "BAV", "BGB", "CAL", "CCA", "CHH", "CPA", "CQH", "CRK", "CSC", "CSN", "CSS", "CSZ", "CTV", "CXA", "EVA", "GIA", "GLP", "HGB", "HKC", "HKE", "HVN", "HZS", "JAL", "JCC", "JJA", "JNA", "KAL", "KME", "KMI", "KXP", "LHA", "LNI", "MGL", "MKR", "MYU", "RLH", "SJX", "SLK", "SWM", "TTW", "TVJ", "UAE", "UPS", "WCM"];
 
 //level_SR = { "110": 0.01, "120": 0.29, "170": 0.05, "190": 0.1, "210": 0.1, "230": 0.2, "250": 0.2, "270": 0.05 };
 //level_LD = { "A090": 0.1, "F110": 0.9 };
@@ -279,14 +279,17 @@ function updateTransfer(closeModal) {
 	const transferModal = $('#transferModal');
 	const acidInput = $('#transferModal #acid').val();
 	const timeInput = $('#transferModal #time').val();
+	const ftlInput = $('#transferModal #ftl').val();
 	
 	if (/(0[0-9]|1[0-9]|2[0-3])[0-5][0-9]/.test(timeInput)) {
 		$('#transferModal #time').removeClass("is-invalid");
 		time = Number(timeInput.substr(0,2)) * 60 + Number(timeInput.substr(2,2));
+		ftl = ftlInput.replace("F", "");
 
 		flights.find((o, i) => {
 			if (o.acid === acidInput) {
 				flights[i].fix_est = time;
+				flights[i].fl = ftl;
 				fix = flights[i].in_fix;
 				return true; // stop searching
 			}

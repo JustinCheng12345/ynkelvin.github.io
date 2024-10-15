@@ -248,7 +248,7 @@
 							<div class="input-group input-group-sm mb-3">
 								<span class="input-group-text">FTL</span>
 								<input type="text" class="form-control" aria-label="FTL"
-									aria-describedby="inputGroup-sizing-sm" id="ftl" tabindex="2" oninput="this.value = this.value.toUpperCase().replace(/[^0-9FASM]/g, '').replace(/(..*?)[FASM].*/g, '$1');" disabled readonly>
+									aria-describedby="inputGroup-sizing-sm" id="ftl" tabindex="2" oninput="this.value = this.value.toUpperCase().replace(/[^0-9FASM]/g, '').replace(/(..*?)[FASM].*/g, '$1');" onfocusout="this.value = this.value.replace(/^([^FASM].*)/g, 'F$1');">
 							</div>
 						</div>
 					</form>
