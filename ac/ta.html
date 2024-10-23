@@ -78,7 +78,7 @@
         <![endif]-->
 
 	<div class="card vh-100">
-		<div class="card-body h-100">
+		<div class="card-body h-100" style="zoom: 75%;">
 
 			<div class="container-fluid text-center font-monospace bg-dark h-100" data-bs-theme="dark">
 				<div class="row h-100">
@@ -171,7 +171,7 @@
 						</div>
 					</div>
 
-					<div class="col-4 border-start border-end border-white h-100">
+					<div class="col border-start border-end border-white h-100">
 						<div class="card h-100">
 							<div class="card-header">Active - SIERA</div>
 							<div class="card-body h-100">
@@ -211,7 +211,7 @@
 					</div>
 					<div class="col"></div>
 					<div class="col-2">
-						<button type="button" class="btn btn-primary btn-sm" onclick="startExercise(10)">New Exercise</button>
+						<button type="button" class="btn btn-primary btn-sm" onclick="startExercise('ta')">New Exercise</button>
 						<button type="button" class="btn btn-primary btn-sm" onclick="showFlow()">WIB</button>
 						<button type="button" class="btn btn-primary btn-sm" onclick="checkAnswer()">Check Answer</button>
 					</div>
@@ -342,6 +342,11 @@
 	<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.min.js"
 		integrity="sha256-Fb0zP4jE3JHqu+IBB9YktLcSjI1Zc6J2b6gTjB0LpoM=" crossorigin="anonymous"></script>
 	<script src="ac.js"></script>
+	<script>
+		$( document ).ready(function() {
+			startExercise('ta');
+		});
+	</script>
 
 </body>
 

@@ -20,8 +20,58 @@ dest_list = {
 };
 
 bay = {
-	"SIERA" : "#bay_sr" 
+	"SIERA" : "#bay_sr",
+	"SIKOU" : "#bay_si",
+	"IKELA" : "#bay_ik",
+	"EPKAL" : "#bay_ek",
+	"TAMOTBEKOL" : "#bay_tmbk",
+	"DOSUTASOBA" : "#bay_dssb"
 }
+
+acft_list = ["B748", "B744", "B789", "B788", "B77W", "B773", "B77L", "B772", "B763", "B762", "B753", "B752", "B39M", "B38M", "B739", "B738", "B737", "B734", "A388", "A35K", "A359", "A346", "A343", "A333", "A332", "A306", "A21N", "A20N", "A321", "A320", "A319", "E190", "DC10", "MD11", "MD90", "GLF6", "GLF5", "GLEX", "GALX", "CL60"];
+
+acft_m = {
+	"B748" : [86], 
+	"B744" : [86], 
+	"B789" : [85], 
+	"B788" : [85], 
+	"B77W" : [84, 85], 
+	"B773" : [84, 85], 
+	"B77L" : [84, 85], 
+	"B772" : [84, 85], 
+	"B763" : [80, 81, 82, 83], 
+	"B762" : [80, 81, 82, 83], 
+	"B753" : [80, 81, 82], 
+	"B752" : [80, 81, 82], 
+	"B39M" : [79, 80], 
+	"B38M" : [79, 80], 
+	"B739" : [79, 80], 
+	"B738" : [79, 80], 
+	"B737" : [79, 80], 
+	"B734" : [74, 75, 76, 77, 78], 
+	"A388" : [85], 
+	"A35K" : [85], 
+	"A359" : [85], 
+	"A346" : [83], 
+	"A343" : [82], 
+	"A333" : [82], 
+	"A332" : [82], 
+	"A306" : [79], 
+	"A21N" : [78, 79], 
+	"A20N" : [78, 79], 
+	"A321" : [78, 79], 
+	"A320" : [78, 79], 
+	"A319" : [78, 79], 
+	"E190" : [78], 
+	"DC10" : [82], 
+	"MD11" : [83], 
+	"MD90" : [76], 
+	"GLF6" : [85, 86, 87, 88, 89, 90], 
+	"GLF5" : [80, 81, 82, 83, 84, 85], 
+	"GLEX" : [85, 86, 87, 88], 
+	"GALX" : [82], 
+	"CL60" : [75]
+};
 
 flights = [];
 
@@ -46,37 +96,64 @@ function random(items) {
 
 
 
-function genFlight(time) {
-	out_fix = randomP({ "": 0.3, "ENVAR": 0.1, "NOMAN": 0.15, "SABNO": 0.15, "EPKAL": 0.15, "IKELA": 0.15 });
+function genFlight(fix, time) {
+	switch (fix) {
+		case "SIERA":
+			out_fix = randomP({ "": 0.3, "ENVAR": 0.1, "NOMAN": 0.15, "SABNO": 0.15, "EPKAL": 0.15, "IKELA": 0.15 });
 
-	if (out_fix === "") {
-		dest = "VHHH";
-		dep = randomP({ "ZGGG": 0.3, "ZGSZ": 0.1, "OMDB": 0.2, "ZGNN": 0.2, "ZKKK": 0.1, "ZMCK": 0.1 });
-	} else {
-		dest = random(dest_list[out_fix]);
-		dep = randomP({ "ZGGG": 0.8, "ZGSZ": 0.2 });
+			if (out_fix === "") {
+				dest = "VHHH";
+				dep = randomP({ "ZGGG": 0.3, "ZGSZ": 0.1, "OMDB": 0.2, "ZGNN": 0.2, "ZKKK": 0.1, "ZMCK": 0.1 });
+			} else {
+				dest = random(dest_list[out_fix]);
+				dep = randomP({ "ZGGG": 0.8, "ZGSZ": 0.2 });
+			}
+
+			if (dep === "ZGSZ") {
+				fl = randomP({ "110": 0.1, "120": 0.9 });
+			} else {
+				if (dest === "VHHH") {
+					fl = randomP({ "170": 0.1, "190": 0.2, "210": 0.3, "230": 0.3, "250": 0.1 });
+				} else {
+					fl = randomP({ "210": 0.1, "230": 0.3, "250": 0.5, "270": 0.1 });
+				}
+			}
+			break;
+		case "TAMOT":
+			break;
+		
+		case "BEKOL":
+			break;
+
+		case "DOSUT":
+			break;
+
+		case "ASOBA":
+			break;
+
+		case "EPKAL":
+			break;
+
+		case "IKELA":
+			break;
+
+		case "SIKOU":
+			break;
 	}
 
-	if (dep === "ZGSZ") {
-		fl = randomP({ "110": 0.1, "120": 0.9 });
-	} else {
-		if (dest === "VHHH") {
-			fl = randomP({ "170": 0.1, "190": 0.2, "210": 0.3, "230": 0.3, "250": 0.1 });
-		} else {
-			fl = randomP({ "210": 0.1, "230": 0.3, "250": 0.5, "270": 0.1 });
-		}
-	}
+	acft_type = random(acft_list);
 
 	flight = {
 		acid: random(callsign) + Math.floor(Math.random() * 10000),
 		dep: dep,
 		dest: dest,
-		in_fix: "SIERA",
+		in_fix: fix,
 		out_fix: out_fix,
 		fix_est: time,
 		fl: fl,
 		fl_light: "",
-		acft: "A320",
+		acft: acft_type,
+		speed: random(acft_m[acft_type]),
 		ssr: Math.floor(Math.random() * 7).toString() + Math.floor(Math.random() * 8).toString() + Math.floor(Math.random() * 8).toString() + Math.floor(Math.random() * 8).toString(),
 		rvsm: "WR",
 		rbox: "",
@@ -85,113 +162,139 @@ function genFlight(time) {
 	};
 
 	flights.push(flight);
+
 }
 
 
 
 // Functions
 
-function resetRules(){
-	// set rules
-	level = {
-		"SR_ZGSZ": ["120"],
-		"SR_VHHH": ["190", "210", "230"],
-		"SR_other": ["230", "250"]
-	};
+function resetRules(exer){
+	if (exer === "ta"){
+		// set rules
+		level = {
+			"SR_ZGSZ": ["120"],
+			"SR_VHHH": ["190", "210", "230"],
+			"SR_other": ["230", "250"]
+		};
 
-	level_yellow = {
-		"SR_ZGSZ": ["110"],
-		"SR_VHHH": ["170", "250"],
-		"SR_other": ["210", "270"]
-	};
+		level_yellow = {
+			"SR_ZGSZ": ["110"],
+			"SR_VHHH": ["170", "250"],
+			"SR_other": ["210", "270"]
+		};
 
-	separation = [
-		{flow: false, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "20NM"},
-		//{flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "7"},
-		//{flow: true, both: true, dep: "MAINLAND", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "7"},
-		{flow: false, both: false, dep: "", dep_not: "ZGSZ", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "16NM"},
-		{flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "5NM"},
-		{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "VHHH", in_fix: "SIERA", out_fix: "", sep: "30NM"},
-		{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "ELATO", sep: "10"},
-		{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "ENVAR", sep: "10"},
-		{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "NOMAN", sep: "10"},
-		{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "SABNO", sep: "10"},
-		{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "EPKAL", sep: "10"},
-		{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "IKELA", sep: "10"},
+		separation = [
+			{flow: false, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "20NM"},
+			//{flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "7"},
+			//{flow: true, both: true, dep: "MAINLAND", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "7"},
+			{flow: false, both: false, dep: "", dep_not: "ZGSZ", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "16NM"},
+			{flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "5NM"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "VHHH", in_fix: "SIERA", out_fix: "", sep: "30NM"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "ELATO", sep: "10"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "ENVAR", sep: "10"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "NOMAN", sep: "10"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "SABNO", sep: "10"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "EPKAL", sep: "10"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "IKELA", sep: "10"},
 
-	];
+		];
+	}
 }
 
-function generateFlow(){
-	nnsb = Math.random() >= 0.3;
-	nnsb_sep = (Math.floor(Math.random() * 10) + 11).toString();
+function generateFlow(exer){
+	if (exer === "ta"){
+		nnsb = Math.random() >= 0.3;
+		nnsb_sep = (Math.floor(Math.random() * 10) + 11).toString();
 
-	ekik = Math.random() >= 0.3;
-	ekik_sep = (Math.floor(Math.random() * 10) + 11).toString();
+		ekik = Math.random() >= 0.3;
+		ekik_sep = (Math.floor(Math.random() * 10) + 11).toString();
 
-	ldg = Math.random() >= 0.3;
-	ldg_sep = (Math.floor(Math.random() * 5) + 5).toString();
+		ldg = Math.random() >= 0.3;
+		ldg_sep = (Math.floor(Math.random() * 5) + 5).toString();
 
-	flow = [
-		{text: "SIERA - NOMAN", sep: nnsb_sep, cfs: "", validity:"UFN", remarks: "", active: nnsb},
-		{text: "SIERA - SABNO", sep: nnsb_sep, cfs: "", validity:"UFN", remarks: "", active: nnsb},
-		{text: "SIERA - EPKAL", sep: ekik_sep, cfs: "", validity:"UFN", remarks: "", active: ekik},
-		{text: "SIERA - IKELA", sep: ekik_sep, cfs: "", validity:"UFN", remarks: "", active: ekik},
-		{text: "SIERA DEP ZXXX LDG VHHH", sep: ldg_sep, cfs: "", validity:"UFN", remarks: "", active: ldg},
-		{text: "SIERA LDG VHHH F190 N/A", sep: "", cfs: "", validity:"UFN", remarks: "", active: ldg},
-		{text: "SIERA OVF VHHK F250 ONLY", sep: "", cfs: "", validity:"UFN", remarks: "", active: ldg},
-	]
+		flow = [
+			{text: "SIERA - NOMAN", sep: nnsb_sep, cfs: "", validity:"UFN", remarks: "", active: nnsb},
+			{text: "SIERA - SABNO", sep: nnsb_sep, cfs: "", validity:"UFN", remarks: "", active: nnsb},
+			{text: "SIERA - EPKAL", sep: ekik_sep, cfs: "", validity:"UFN", remarks: "", active: ekik},
+			{text: "SIERA - IKELA", sep: ekik_sep, cfs: "", validity:"UFN", remarks: "", active: ekik},
+			{text: "SIERA DEP ZXXX LDG VHHH", sep: ldg_sep, cfs: "", validity:"UFN", remarks: "", active: ldg},
+			{text: "SIERA LDG VHHH F190 N/A", sep: "", cfs: "", validity:"UFN", remarks: "", active: ldg},
+			{text: "SIERA OVF VHHK F250 ONLY", sep: "", cfs: "", validity:"UFN", remarks: "", active: ldg},
+		]
 
-	if (nnsb) {
-		separation.push({flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "NOMAN", sep: nnsb_sep});
-		separation.push({flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "SABNO", sep: nnsb_sep});
-		separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "NOMAN", sep: nnsb_sep});
-		separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "SABNO", sep: nnsb_sep});
+		if (nnsb) {
+			separation.push({flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "NOMAN", sep: nnsb_sep});
+			separation.push({flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "SABNO", sep: nnsb_sep});
+			separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "NOMAN", sep: nnsb_sep});
+			separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "SABNO", sep: nnsb_sep});
+		}
+
+		if (ekik) {
+			separation.push({flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "EPKAL", sep: ekik_sep});
+			separation.push({flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "IKELA", sep: ekik_sep});
+			separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "EPKAL", sep: ekik_sep});
+			separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "IKELA", sep: ekik_sep});
+		}
+
+		if (ldg) {
+			separation.push({flow: true, both: true, dep: "MAINLAND", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: ldg_sep});
+			separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: ldg_sep});
+
+			level["SR_VHHH"] = ["210", "230"];
+			level_yellow["SR_VHHH"].push("190");
+
+			level["SR_other"] = ["250"];
+			level_yellow["SR_other"].push("230");
+		}
 	}
-
-	if (ekik) {
-		separation.push({flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "EPKAL", sep: ekik_sep});
-		separation.push({flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "IKELA", sep: ekik_sep});
-		separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "EPKAL", sep: ekik_sep});
-		separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "IKELA", sep: ekik_sep});
-	}
-
-	if (ldg) {
-		separation.push({flow: true, both: true, dep: "MAINLAND", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: ldg_sep});
-		separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: ldg_sep});
-
-		level["SR_VHHH"] = ["210", "230"];
-		level_yellow["SR_VHHH"].push("190");
-
-		level["SR_other"] = ["250"];
-		level_yellow["SR_other"].push("230");
-	}
-
-
 }
 
-function startExercise(num) {
+function startExercise(exer) {
 
-	resetRules();
+	resetRules(exer);
 
-	generateFlow();
+	generateFlow(exer);
 
-	flights = [];
+	if (exer === "ta"){
+		num = 10;
 
-	initTime = Math.floor(Math.random() * 1340);
-	$("#clock").html(`<span class="fs-5">${showTime(initTime)}</span>00`)
+		flights = [];
+	
+		initTime = Math.floor(Math.random() * 1340);
+		$("#clock").html(`<span class="fs-5">${showTime(initTime)}</span>00`)
+	
+		times = [initTime + 15];
+	
+		for (i = 0; i < num - 1; i++) {
+			times.push(Number(times.slice(-1)) + Math.floor(Math.random() * 5) + 1);
+		};
+	
+		times.forEach(element => {
+			genFlight("SIERA", element);
+		});
+	
+		drawBoard("SIERA");
+	} else if (exer === "wa"){
+		num = 10;
 
-	times = [initTime + 15];
-
-	for (i = 0; i < num - 1; i++) {
-		times.push(Number(times.slice(-1)) + Math.floor(Math.random() * 5) + 1);
-	};
-
-	times.forEach(element => {
-		genFlight(element);
-	});
-
-	drawBoard("SIERA");
+		flights = [];
+	
+		initTime = Math.floor(Math.random() * 1340);
+		$("#clock").html(`<span class="fs-5">${showTime(initTime)}</span>00`)
+	
+		times = [initTime + 15];
+	
+		for (i = 0; i < num - 1; i++) {
+			times.push(Number(times.slice(-1)) + Math.floor(Math.random() * 5) + 1);
+		};
+	
+		times.forEach(element => {
+			genFlight("SIKOU", element);
+		});
+	
+		drawBoard("SIKOU");	
+	}
 
 	showFlow();
 }
@@ -677,7 +780,10 @@ function drawOVF(fix, flight) {
 function drawBoard(fix) {
 	flights.sort((a, b) => a.fix_est - b.fix_est);
 
-	flight_draw = flights; //update select logic
+	flight_draw = flights.filter((f) => 
+		((fix.startsWith(f.in_fix) || fix.endsWith(f.in_fix)) || 
+		((fix.startsWith(f.out_fix) || fix.endsWith(f.out_fix)) && f.in_fix === ""))
+	); //update select logic
 
 	i = 0;
 	efs_html = "";
@@ -769,7 +875,6 @@ $( document ).ready(function() {
 		}
 	});
 
-	startExercise(10);
 });
 
 
