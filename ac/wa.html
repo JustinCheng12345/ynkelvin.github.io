@@ -59,6 +59,12 @@
 			padding: 10px;
 		}
 
+		/*@media screen and (max-width: 2560px) and (max-height: 1440px) {
+			html {
+				transform: scale(.75);   
+			}
+		}*/
+
 
 	</style>
 	<!-- Google tag (gtag.js) -->
@@ -85,9 +91,9 @@
 
 					<div class="col border-start border-end border-white h-100">
 						<div class="card h-100">
-							<div class="card-header">AC Verbal</div>
+							<div class="card-header">Active - SIKOU</div>
 							<div class="card-body h-100">
-								<div class="d-flex flex-column-reverse h-100 efs-bay" id="bay_verbal">
+								<div class="d-flex flex-column-reverse h-100 efs-bay overflow-auto" id="bay_si">
 
 
 								</div>
@@ -97,9 +103,9 @@
 
 					<div class="col border-start border-end border-white h-100">
 						<div class="card h-100">
-							<div class="card-header">VMMC</div>
+							<div class="card-header">Active - IKELA</div>
 							<div class="card-body h-100">
-								<div class="d-flex flex-column-reverse h-100 efs-bay" id="bay_vmmc">
+								<div class="d-flex flex-column-reverse h-100 efs-bay overflow-auto" id="bay_ik">
 									<!-- Arrival EFS
                                     <div class="row">
                                         <div class="col-1"></div>
@@ -173,9 +179,9 @@
 
 					<div class="col border-start border-end border-white h-100">
 						<div class="card h-100">
-							<div class="card-header">Active - SIERA</div>
+							<div class="card-header">Active - EPKAL</div>
 							<div class="card-body h-100">
-								<div class="d-flex flex-column-reverse h-100 efs-bay overflow-auto" id="bay_sr">
+								<div class="d-flex flex-column-reverse h-100 efs-bay overflow-auto" id="bay_ek">
 
 
 								</div>
@@ -184,12 +190,25 @@
 					</div>
 
 					<div class="col border-start border-end border-white h-100">
-						<div class="card h-100">
-							<div class="card-header">Active - LANDA</div>
-							<div class="card-body h-100">
-								<div class="d-flex flex-column-reverse h-100 efs-bay" id="bay_ld">
+						<div class="row h-50">
+							<div class="card h-100">
+								<div class="card-header">TAMOT/BEKOL</div>
+								<div class="card-body h-100">
+									<div class="d-flex flex-column-reverse h-100 efs-bay overflow-auto" id="bay_tmbk">
 
 
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row h-50">
+							<div class="card h-100">
+								<div class="card-header">DOSUT/ASOBA</div>
+								<div class="card-body h-100">
+									<div class="d-flex flex-column-reverse h-100 efs-bay overflow-auto" id="bay_dssb">
+
+
+									</div>
 								</div>
 							</div>
 						</div>
@@ -211,7 +230,7 @@
 					</div>
 					<div class="col"></div>
 					<div class="col-2">
-						<button type="button" class="btn btn-primary btn-sm" onclick="startExercise('ta')">New Exercise</button>
+						<button type="button" class="btn btn-primary btn-sm" onclick="startExercise('wa')">New Exercise</button>
 						<button type="button" class="btn btn-primary btn-sm" onclick="showFlow()">WIB</button>
 						<button type="button" class="btn btn-primary btn-sm" onclick="checkAnswer()">Check Answer</button>
 					</div>
@@ -344,7 +363,7 @@
 	<script src="ac.js"></script>
 	<script>
 		$( document ).ready(function() {
-			exer = "ta";
+			exer = "wa";
 			startExercise();
 		});
 	</script>

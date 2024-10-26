@@ -1,7 +1,7 @@
 keyPressed = {};
 
 // Generate EFS
-callsign = ["AIQ", "APG", "AXM", "BAV", "BGB", "CAL", "CCA", "CHH", "CPA", "CQH", "CRK", "CSC", "CSN", "CSS", "CSZ", "CTJ", "CTV", "CXA", "EVA", "GIA", "GLP", "HGB", "HKC", "HKE", "HVN", "HZS", "JAL", "JCC", "JJA", "JNA", "KAL", "KME", "KMI", "KXP", "LHA", "LNI", "MGL", "MKR", "MYU", "NEP", "PAL", "QTR", "RLH", "SJX", "SLK", "SWM", "TGW", "TTW", "TVJ", "UAE", "UPS", "WCM"];
+callsign = ["ABL", "AIQ", "APG", "AXM", "BAV", "BGB", "CAL", "CCA", "CHH", "CPA", "CQH", "CRK", "CSC", "CSN", "CSS", "CSZ", "CTJ", "CTV", "CXA", "EVA", "GIA", "GLP", "HGB", "HKC", "HKE", "HVN", "HZS", "JAL", "JCC", "JJA", "JNA", "KAL", "KME", "KMI", "KXP", "LHA", "LNI", "MGL", "MKR", "MYU", "NEP", "PAL", "QTR", "RBA", "RLH", "SJX", "SLK", "SWM", "TGW", "TTW", "TVJ", "UAE", "UPS", "WCM"];
 
 //level_SR = { "110": 0.01, "120": 0.29, "170": 0.05, "190": 0.1, "210": 0.1, "230": 0.2, "250": 0.2, "270": 0.05 };
 //level_LD = { "A090": 0.1, "F110": 0.9 };
@@ -9,15 +9,41 @@ callsign = ["AIQ", "APG", "AXM", "BAV", "BGB", "CAL", "CCA", "CHH", "CPA", "CQH"
 level = {};
 separation = [];
 flow = [];
-fatal = [];
+fatal = {};
 
 dest_list = {
 	"ENVAR": ["RCTP", "RCKH", "RJAA", "RJGG", "RJCC", "KSFO", "CYVR"],
+	"KAPLI": ["RCTP", "RCKH", "RJAA", "RJGG", "RJCC", "KSFO", "CYVR"],
 	"NOMAN": ["RPLL", "RPLC", "YSSY"],
 	"SABNO": ["WIII", "YPPH", "WBSB", "RPLL", "WAMM", "YMML"],
 	"EPKAL": ["WSSS", "WADD", "WMKK"],
-	"IKELA": ["VVDN", "VDPP", "VYYY", "VGHS"]
+	"IKELA": ["VVDN", "VVTS", "VDPP", "VYYY", "VGHS"],
+	"SIKOU": ["VVTS"],
+	"TAMOT": ["ZGGG"],
+	"LANDA": ["ZGSZ"],
+	"BEKOL": ["ZSPD", "ZSHC", "ZBAA", "ZBAD", "ZBTJ", "ZUUU", "ZGHA"],
+	"DOTMI": ["ZSPD", "ZSSS", "ZSHC", "ZSNB", "ZSYW", "ZSAM", "ZGMX", "ZSQZ", "ZSFZ", "ZSWY", "ZSWZ", "ZSOF"]
 };
+
+traffic_dir = {
+	"SIERA": "E",
+	"ASOBA": "W",
+	"DOSUT": "E",
+	"TAMOT": "W_m",
+	"BEKOL": "E_m",
+	"EPKAL": "W",
+	"IKELA_in": "E",
+	"IKELA_out": "W",
+	"SIKOU_in": "E_m",
+	"SIKOU_out": "W_m"
+}
+
+flas = {
+	"E": ["110", "130", "150", "170", "190", "210", "230", "250", "270", "290", "310", "330", "350", "370", "390", "410", "450"],
+	"E_m": ["S0570", "S0630", "S0690", "S0750", "S0810", "S0890", "S0950", "S1010", "S1070", "S1130", "S1190", "S1250"],
+	"W": ["120", "140", "160", "180", "200", "220", "240", "260", "280", "300", "320", "340", "360", "380", "400", "430"],
+	"W_m": ["S0600", "S0660", "S0720", "S0780", "S0840", "S0920", "S0980", "S1040", "S1100", "S1160", "S1220"],
+}
 
 bay = {
 	"SIERA" : "#bay_sr",
@@ -96,7 +122,7 @@ function random(items) {
 
 
 
-function genFlight(fix, time) {
+function genFlight(fix, inout, time) {
 	switch (fix) {
 		case "SIERA":
 			out_fix = randomP({ "": 0.3, "ENVAR": 0.1, "NOMAN": 0.15, "SABNO": 0.15, "EPKAL": 0.15, "IKELA": 0.15 });
@@ -120,28 +146,95 @@ function genFlight(fix, time) {
 			}
 			break;
 		case "TAMOT":
+			out_fix = randomP({ "ENVAR": 0.2, "NOMAN": 0.2, "SABNO": 0.2, "EPKAL": 0.2, "IKELA": 0.1, "SIKOU": 0.1 });
+
+			dest = random(dest_list[out_fix]);
+
+			dep = random(["ZSPD", "ZSHC", "ZBAA", "ZBAD", "ZBTJ", "ZUUU", "ZGHA"]);
+
+			fl = randomP({ "S0840": 0.1, "S0920": 0.15, "S0980": 0.15, "S1040": 0.1, "S1100": 0.1, "S1160": 0.1, "S1220": 0.1, "S1130": 0.1, "S1250": 0.1 });
 			break;
 		
 		case "BEKOL":
 			break;
 
 		case "DOSUT":
+			out_fix = randomP({ "": 0.2, "DOTMI": 0.5, "SIKOU": 0.1, "BEKOL": 0.2 });
+
+			if (out_fix === "") {
+				dest = "VHHH";
+			} else {
+				dest = random(dest_list[out_fix]);
+			}
+
+			dep = random(["WIII", "WIHH", "WBSB", "WBGR", "WBGG", "WBGS", "WBKL", "WBGB"]);
+
+			fl = randomP({ "310": 0.25, "320": 0.25, "340": 0.1, "350": 0.1, "360": 0.1, "390": 0.1, "400": 0.1 });
 			break;
 
 		case "ASOBA":
+			out_fix = "";
+			dest = "VHHH";
+			dep = random(["WIII", "WIHH", "WBSB", "WBGR", "WBGG", "WBGS", "WBKL", "WBGB"]);
+
+			fl = randomP({ "300": 0.4, "320": 0.1, "340": 0.1, "380": 0.4 });
 			break;
 
 		case "EPKAL":
 			break;
 
 		case "IKELA":
-			break;
+			if (inout === "in"){
+				if (time <= 14 || time >= 975){
+					out_fix = randomP({ "": 0.2, "DOTMI": 0.3, "ENVAR": 0.3, "KAPLI": 0.05, "BEKOL": 0.1, "LANDA": 0.05 });
+				} else {
+					out_fix = randomP({ "": 0.2, "DOTMI": 0.3, "ENVAR": 0.05, "KAPLI": 0.3, "BEKOL": 0.1, "LANDA": 0.05 });
+				}
+				if (out_fix === "") {
+					dest = random(["VHHH", "VMMC"]);
+				} else {
+					dest = random(dest_list[out_fix]);
+				}
 
+				dep = random(["VVDN", "VVTS", "VDPP", "VYYY", "VGHS", "ZJSY"]);
+
+				fl = randomP({ "290": 0.2, "330": 0.2, "370": 0.2, "410": 0.2, "350": 0.05, "390": 0.1, "270": 0.05 });
+			} else {
+
+			}
+			break;
 		case "SIKOU":
+			if (inout === "in"){
+				out_fix = randomP({ "": 0.4, "NOMAN": 0.15, "SABNO": 0.15, "BEKOL": 0.15, "KAPLI": 0.15 });
+
+				if (out_fix === "") {
+					dest = random(["VHHH", "VMMC"]);
+				} else {
+					dest = random(dest_list[out_fix]);
+				}
+	
+				dep = random(["VTBS", "ZJSY", "ZJHK", "ZGZJ"]);
+	
+				if (dep === "ZJSY"){
+					fl = randomP({ "S0810": 0.35, "S0890": 0.35, "S0840": 0.15, "S1010": 0.15 });					
+				} else if (dep === "ZJHK" || dep === "ZGZJ"){
+					fl = randomP({ "S0570": 0.6, "S0600": 0.2, "S0630": 0.2 });					
+				} else {
+					fl = randomP({ "S1010": 0.15, "S1070": 0.15, "S1130": 0.15, "S1190": 0.15, "S1250": 0.2, "S0950": 0.1, "S0890": 0.1 });					
+				}
+			}
 			break;
 	}
 
 	acft_type = random(acft_list);
+
+	field18 = "";
+
+	if (["IKELA","EPKAL","DOSUT"].includes(fix)){
+		field18 += randomP({ "W": 0.05, "": 0.95 });
+		field18 += randomP({ "D": 0.05, "": 0.95 });
+		field18 += randomP({ "0": 0.05, "": 0.95 });
+	}
 
 	flight = {
 		acid: random(callsign) + Math.floor(Math.random() * 10000),
@@ -155,10 +248,11 @@ function genFlight(fix, time) {
 		acft: acft_type,
 		speed: random(acft_m[acft_type]),
 		ssr: Math.floor(Math.random() * 7).toString() + Math.floor(Math.random() * 8).toString() + Math.floor(Math.random() * 8).toString() + Math.floor(Math.random() * 8).toString(),
-		rvsm: "WR",
+		rvsm: ((field18.indexOf('W') > -1)?"WN":"WR"),
 		rbox: "",
-		f18: "",
-		cloak: ""
+		f18: field18,
+		cloak: "",
+		timepage: false
 	};
 
 	flights.push(flight);
@@ -166,10 +260,9 @@ function genFlight(fix, time) {
 }
 
 
-
 // Functions
 
-function resetRules(exer){
+function resetRules(){
 	if (exer === "ta"){
 		// set rules
 		level = {
@@ -178,10 +271,36 @@ function resetRules(exer){
 			"SR_other": ["230", "250"]
 		};
 
-		level_yellow = {
-			"SR_ZGSZ": ["110"],
-			"SR_VHHH": ["170", "250"],
-			"SR_other": ["210", "270"]
+		separation = [
+			{flow: false, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "20NM"},
+			//{flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "7"},
+			//{flow: true, both: true, dep: "MAINLAND", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "7"},
+			{flow: false, both: false, dep: "", dep_not: "ZGSZ", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "16NM"},
+			{flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "5NM"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "VHHH", in_fix: "SIERA", out_fix: "", sep: "30NM"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "ELATO", sep: "10"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "ENVAR", sep: "10"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "NOMAN", sep: "10"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "SABNO", sep: "10"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "EPKAL", sep: "10"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "IKELA", sep: "10"},
+
+		];
+	} else if (exer === "wa"){
+		// set rules
+		level = {
+			"SB": ["300", "380"],
+			"DS": ["270", "310", "320", "350", "360", "400"],
+			"DS_390": ["270", "310", "320", "350", "360", "390", "400"],
+			"DS_defi": ["270"],
+			"TM": ["S0920", "S0980", "S1040", "S1100", "S1160"],
+			"IK_in": ["270", "290", "330", "370", "410"],
+			"IK_in_390": ["270", "290", "330", "370", "390", "410"],
+			"IK_defi": ["270"],
+			"SI_in": ["S1010", "S1070", "S1130", "S1190"],
+			"SI_in_ovf": ["S1010", "S1070", "S1130", "S1190", "S1250"],
+			"SI_in_ZJSY": ["S0810", "S0890"],
+			"SI_in_ZJHKZGZJ": ["S0570"]
 		};
 
 		separation = [
@@ -202,7 +321,7 @@ function resetRules(exer){
 	}
 }
 
-function generateFlow(exer){
+function generateFlow(){
 	if (exer === "ta"){
 		nnsb = Math.random() >= 0.3;
 		nnsb_sep = (Math.floor(Math.random() * 10) + 11).toString();
@@ -242,58 +361,50 @@ function generateFlow(exer){
 			separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: ldg_sep});
 
 			level["SR_VHHH"] = ["210", "230"];
-			level_yellow["SR_VHHH"].push("190");
 
 			level["SR_other"] = ["250"];
-			level_yellow["SR_other"].push("230");
 		}
 	}
 }
 
-function startExercise(exer) {
+function genFlightTime(fix, inout, initTime, timediff, num) {	
+	times = [initTime + 15];
 
-	resetRules(exer);
+	for (i = 0; i < num - 1; i++) {
+		times.push(Number(times.slice(-1)) + Math.floor(Math.random() * timediff) + 1);
+	};
 
-	generateFlow(exer);
+	times.forEach(element => {
+		genFlight(fix, inout, element);
+	});
+}
+
+function startExercise() {
+
+	resetRules();
+
+	generateFlow();
+
+	flights = [];
+
+	initTime = Math.floor(Math.random() * 1340);
+	$("#clock").html(`<span class="fs-5">${showTime(initTime)}</span>00`)
 
 	if (exer === "ta"){
-		num = 10;
+		genFlightTime("SIERA", "in", initTime, 5, 10);
 
-		flights = [];
-	
-		initTime = Math.floor(Math.random() * 1340);
-		$("#clock").html(`<span class="fs-5">${showTime(initTime)}</span>00`)
-	
-		times = [initTime + 15];
-	
-		for (i = 0; i < num - 1; i++) {
-			times.push(Number(times.slice(-1)) + Math.floor(Math.random() * 5) + 1);
-		};
-	
-		times.forEach(element => {
-			genFlight("SIERA", element);
-		});
-	
 		drawBoard("SIERA");
 	} else if (exer === "wa"){
-		num = 10;
+		genFlightTime("ASOBA", "in", initTime, 10, 3);
+		genFlightTime("DOSUT", "in", initTime, 3, 5);
+		genFlightTime("TAMOT", "in", initTime, 3, 5);
+		genFlightTime("IKELA", "in", initTime, 3, 10);
+		genFlightTime("SIKOU", "in", initTime, 3, 10);
 
-		flights = [];
-	
-		initTime = Math.floor(Math.random() * 1340);
-		$("#clock").html(`<span class="fs-5">${showTime(initTime)}</span>00`)
-	
-		times = [initTime + 15];
-	
-		for (i = 0; i < num - 1; i++) {
-			times.push(Number(times.slice(-1)) + Math.floor(Math.random() * 5) + 1);
-		};
-	
-		times.forEach(element => {
-			genFlight("SIKOU", element);
-		});
-	
-		drawBoard("SIKOU");	
+		drawBoard("DOSUTASOBA");
+		drawBoard("TAMOTBEKOL");
+		drawBoard("IKELA");
+		drawBoard("SIKOU");
 	}
 
 	showFlow();
@@ -377,6 +488,17 @@ function lightup(acid, fix) {
 	drawBoard(fix);
 }
 
+function flip(acid, fix) {
+	flights.find((o, i) => {
+		if (o.acid === acid) {
+			flights[i].timepage = !flights[i].timepage;
+
+			return true; // stop searching
+		}
+	});
+	drawBoard(fix);
+}
+
 function updateTransfer(closeModal) {
 	fix = "";
 	const transferModal = $('#transferModal');
@@ -433,27 +555,31 @@ function isMainland(ad) {
 	return ( ad.startsWith("Z") && !ad.startsWith("ZK") && !ad.startsWith("ZM") && !ad.startsWith("ZGSZ") );
 }
 
-function checkLevel(flight, traffic) {
+function checkLevel(flight, traffic, traffic_flas) {
+	fix = (flight.in_fix===""?flight.out_fix:flight.in_fix);
+	if (!(fix in fatal)) 
+		fatal[fix] = [];
+
 	if (level[traffic].includes(flight.fl)){
 		if (flight.fl_light === ""){
 			return true;
 		}
-		fatal.push(flight.acid + " level incorrect");
+		fatal[fix].push(flight.acid + " level incorrect");
 		return false;
 	} 
 
-	if (level_yellow[traffic].includes(flight.fl)){
+	if (flas[traffic_dir[traffic_flas]].includes(flight.fl)){
 		if (flight.fl_light === "bg-warning"){
 			return true;
 		}
-		fatal.push(flight.acid + " level incorrect");
+		fatal[fix].push(flight.acid + " level incorrect");
 		return false;
 	} 
 
 	if (flight.fl_light === "bg-danger"){
 		return true;
 	} 
-	fatal.push(flight.acid + " level incorrect");
+	fatal[fix].push(flight.acid + " level incorrect");
 	return false;
 
 }
@@ -505,20 +631,24 @@ function checkSeparation(flight1, flight2) {
 
 	required = rules.map(d => d.sep);
 
+	fix = (flight1.in_fix===""?flight1.out_fix:flight1.in_fix);
+	if (!(fix in fatal)) 
+		fatal[fix] = [];
+
 	required.forEach(s => {
 		if (s.endsWith("NM")){
 			sep = Math.ceil(s.substr(0, s.length-2)/8);
 			if (flight1.fix_est-flight2.fix_est == sep){
 				if (flight1.rbox !== flight2.acid + "+" + s){
-					fatal.push(flight1.acid + " & " + flight2.acid + " no ensure");
+					fatal[fix].push(flight1.acid + " & " + flight2.acid + " no ensure");
 				}
 			} else if (flight1.fix_est-flight2.fix_est < sep){
-				fatal.push(flight1.acid + " & " + flight2.acid + " not enough separation");
+				fatal[fix].push(flight1.acid + " & " + flight2.acid + " not enough separation");
 			}
 		} else {
 			sep = Number(s);
 			if (flight1.fix_est-flight2.fix_est < sep){
-				fatal.push(flight1.acid + " & " + flight2.acid + " not enough separation");
+				fatal[fix].push(flight1.acid + " & " + flight2.acid + " not enough separation");
 			}
 		}
 
@@ -528,36 +658,76 @@ function checkSeparation(flight1, flight2) {
 }
 
 function checkAnswer() {
-	fatal = [];
+	fatal = {};
 
 	flights.forEach(flight => {
-		if (flight.in_fix === "SIERA") {
-			if (flight.dep === "ZGSZ") {
-				checkLevel(flight, "SR_ZGSZ");
-			} else if (flight.dest === "VHHH") {
-				checkLevel(flight, "SR_VHHH");
-			} else {
-				checkLevel(flight, "SR_other");
-			}
+		switch(flight.in_fix){
+			case "SIERA":
+				if (flight.dep === "ZGSZ") {
+					checkLevel(flight, "SR_ZGSZ", "SIERA");
+				} else if (flight.dest === "VHHH") {
+					checkLevel(flight, "SR_VHHH", "SIERA");
+				} else {
+					checkLevel(flight, "SR_other", "SIERA");
+				}
+				break;
+			case "ASOBA":
+				checkLevel(flight, "SB", "ASOBA");
+				break;
+			case "DOSUT":
+				if (flight.f18 !== ""){
+					checkLevel(flight, "DS_defi", "DOSUT");
+				} else if (flight.fix_est <= 960 || flight.fix_est >= 1381) {
+					checkLevel(flight, "DS_390", "DOSUT");
+				} else {
+					checkLevel(flight, "DS", "DOSUT");
+				}
+				break;
+			case "TAMOT":
+				checkLevel(flight, "TM", "TAMOT");
+				break;
+			case "IKELA":
+				if (flight.f18 !== ""){
+					checkLevel(flight, "IK_defi", "IKELA_in");
+				} else if ((flight.fix_est >= 961 && flight.fix_est <= 1380) || ["VHHH", "VMMC", "ZGSZ"].includes(flight.dest) || flight.out_fix === "BEKOL") {
+					checkLevel(flight, "IK_in_390", "IKELA_in");
+				} else {
+					checkLevel(flight, "IK_in", "IKELA_in");
+				}
+				break;
+			case "SIKOU":
+				if (flight.dep === "ZJSY") {
+					checkLevel(flight, "SI_in_ZJSY", "SIKOU_in");
+				} else if (flight.dep === "ZJHK" || flight.dep === "ZGZJ") {
+					checkLevel(flight, "SI_in_ZJHKZGZJ", "SIKOU_in");
+				} else if (flight.dest === "VHHH" || flight.dest === "VMMC") {
+					checkLevel(flight, "SI_in", "SIKOU_in");
+				} else {
+					checkLevel(flight, "SI_in_ovf", "SIKOU_in");
+				}
+				break;
 		}
 	});
 
 	for (let i = 1; i < flights.length; i++) {
 		for (let j = i-1; j >= 0; j--) {
-			//if ((flights[i].in_fix === "SIERA" && flights[i].fl === "270") || (flights[j].in_fix === "SIERA" && flights[j].fl === "270")) continue;
 			checkSeparation(flights[i], flights[j]);
 		}
 	}
 
-	faultHTML = ""
+	faultHTML = "";
 
-	fatal.forEach(f => {
-		//console.log(f);
-		faultHTML += `<li>${f}</li>`;
-	});
-
+	for(let fix in fatal){
+		if (fatal[fix].length > 0){
+			faultHTML += `<b>${fix}</b>`;
+			fatal[fix].forEach(f => {
+				faultHTML += `<li>${f}</li>`;
+			});
+		}
+	}
+ 
 	if (faultHTML === "") {
-		faultHTML = `<li>PASSSSSSSSSSSS</li>`;
+		faultHTML = `<h1>PASSSSSSSSSSSS</h1>`;
 	}
 
 	$("#faultList").html(faultHTML);
@@ -683,11 +853,65 @@ function showDOF(from, to) {
 					return sw;
 			}
 			break;
+		default: return "";
 	}
 }
 
 function showTime(time) {
 	return Math.floor(time / 60).toString().padStart(2, '0') + Math.floor(time % 60).toString().padStart(2, '0');
+}
+
+function showSTAR(fix, dest) {
+	if (dest === "VHHH"){
+		switch(fix) {
+			case "SIERA": 
+				return "SIERA7A";
+			case "SIKOU":
+			case "IKELA":
+				return "CANTO3A";
+			case "DOSUT":
+			case "ASOBA":
+				return "BETTY2A";
+		}
+	} else {
+		switch(fix) {
+			case "SIERA": 
+			case "SIKOU":
+			case "IKELA":
+			case "DOSUT":
+			case "ASOBA":
+				return "CHALI4A";
+		}
+	}
+}
+
+function showLvl(fl){
+	switch(fl){
+		case "S1250": return "411";break;
+		case "S1220": return "401";break;
+		case "S1190": return "391";break;
+		case "S1160": return "381";break;
+		case "S1130": return "371";break;
+		case "S1100": return "361";break;
+		case "S1070": return "351";break;
+		case "S1040": return "341";break;
+		case "S1010": return "331";break;
+		case "S0980": return "321";break;
+		case "S0950": return "311";break;
+		case "S0920": return "301";break;
+		case "S0890": return "291";break;
+		case "S0840": return "276";break;
+		case "S0810": return "266";break;
+		case "S0780": return "256";break;
+		case "S0750": return "246";break;
+		case "S0720": return "236";break;
+		case "S0690": return "226";break;
+		case "S0660": return "217";break;
+		case "S0630": return "207";break;
+		case "S0600": return "197";break;
+		case "S0570": return "187";break;
+		default: return fl;
+	}
 }
 
 function drawCloak(fix, flight, efs) {
@@ -718,9 +942,9 @@ function drawIB(fix, flight) {
                     <div class="container">
                         <div class="row">
                             <div class="col-3 border border-black fs-5" onclick="clickACID('${flight.acid}')">${flight.acid}</div>
-                            <div class="col-2 border border-black fs-5 bg-opacity-50 ${flight.fl_light}" onclick="lightup('${flight.acid}', '${fix}')">${flight.fl}</div>
+                            <div class="col-2 border border-black fs-5 bg-opacity-50 ${flight.fl_light}" onclick="lightup('${flight.acid}', '${fix}')">${showLvl(flight.fl)}</div>
                             <div class="col-2 border border-black">${flight.in_fix}</div>
-                            <div class="col-3 border border-black text-start">SIERA7A</div>
+                            <div class="col-3 border border-black text-start">${showSTAR(flight.in_fix, flight.dest)}</div>
                             <div class="col-1 border border-black">${flight.f18}</div>
                             <div class="col-1 border border-black">${showDOF(flight.in_fix, flight.out_fix)}</div>
                         </div>
@@ -743,7 +967,7 @@ function drawIB(fix, flight) {
 	return drawCloak(fix, flight, efs_html);
 }
 
-function drawOVF(fix, flight) {
+function drawOVF_TA(fix, flight) {
 	efs_html = `
         <div class="col-10">
             <div class="card border-3 rounded-0" style="border-color: magenta;">
@@ -751,7 +975,7 @@ function drawOVF(fix, flight) {
                     <div class="container">
                         <div class="row">
                             <div class="col-3 border border-black fs-5" onclick="clickACID('${flight.acid}')">${flight.acid}</div>
-                            <div class="col-2 border border-black fs-5 bg-opacity-50 ${flight.fl_light}" onclick="lightup('${flight.acid}', '${fix}')">${flight.fl}</div>
+                            <div class="col-2 border border-black fs-5 bg-opacity-50 ${flight.fl_light}" onclick="lightup('${flight.acid}', '${fix}')">${showLvl(flight.fl)}</div>
                             <div class="col-2 border border-black">${flight.in_fix}</div>
                             <div class="col-2 border border-black text-start"></div>
                             <div class="col-1 border border-black">${flight.dep}</div>
@@ -776,6 +1000,73 @@ function drawOVF(fix, flight) {
 
 }
 
+function drawOVF_IN(fix, flight) {
+	if (flight.timepage) {
+		efs_html = `
+			<div class="col-10">
+				<div class="card border-3 rounded-0" style="border-color: magenta;">
+					<div class="card-body">
+						<div class="container">
+							<div class="row">
+								<div class="col-3 border border-black fs-5" onclick="clickACID('${flight.acid}')">${flight.acid}</div>
+								<div class="col-2 border border-black fs-5 bg-opacity-50 ${flight.fl_light}" onclick="lightup('${flight.acid}', '${fix}')" oncontextmenu="flip('${flight.acid}', '${fix}');return false;">${showLvl(flight.fl)}</div>
+								<div class="col-2 border border-black"></div>
+								<div class="col-2 border border-black text-start"></div>
+								<div class="col-1 border border-black"></div>
+								<div class="col-1 border border-black"></div>
+								<div class="col-1 border border-black">${showDOF(flight.in_fix, flight.out_fix)}</div>
+							</div>
+							<div class="row">
+								<div class="col-1 border border-black">${flight.acft}</div>
+								<div class="col-1 border border-black"></div>
+								<div class="col-1 border border-black">${flight.ssr}</div>
+								<div class="col-2 border border-black">${flight.rvsm}</div>
+								<div class="col-2 border border-black text-info">${(flight.out_fix==='ENVAR'||flight.out_fix==='KAPLI'?showTime(flight.fix_est+45):"")}</div>
+								<div class="col-1 border border-black">${showTime(flight.fix_est)}</div>
+								<div class="col-1 border border-black">${flight.dep}</div>
+								<div class="col-1 border border-black">${flight.dest}</div>
+								<div class="col-1 border border-black"></div>
+								<div class="col-1 border border-black" onclick="openRbox('${flight.acid}')">R</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			`;
+	} else {
+			efs_html = `
+			<div class="col-10">
+				<div class="card border-3 rounded-0" style="border-color: magenta;">
+					<div class="card-body">
+						<div class="container">
+							<div class="row">
+								<div class="col-3 border border-black fs-5" onclick="clickACID('${flight.acid}')">${flight.acid}</div>
+								<div class="col-2 border border-black fs-5 bg-opacity-50 ${flight.fl_light}" onclick="lightup('${flight.acid}', '${fix}')" oncontextmenu="flip('${flight.acid}', '${fix}');return false;">${showLvl(flight.fl)}</div>
+								<div class="col-2 border border-black">${flight.in_fix}</div>
+								<div class="col-2 border border-black text-start"></div>
+								<div class="col-1 border border-black">${flight.out_fix}</div>
+								<div class="col-1 border border-black">${flight.f18}</div>
+								<div class="col-1 border border-black">${showDOF(flight.in_fix, flight.out_fix)}</div>
+							</div>
+							<div class="row">
+								<div class="col-1 border border-black">${flight.acft}</div>
+								<div class="col-1 border border-black"></div>
+								<div class="col-1 border border-black">${flight.ssr}</div>
+								<div class="col-2 border border-black">${flight.rvsm}</div>
+								<div class="col-2 border border-black">${showTime(flight.fix_est)}</div>
+								<div class="col-3 border border-black text-start">${flight.rbox}</div>
+								<div class="col-1 border border-black">${flight.dest}</div>
+								<div class="col-1 border border-black" onclick="openRbox('${flight.acid}')">R</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			`;
+	}
+	return drawCloak(fix, flight, efs_html);
+
+}
 
 function drawBoard(fix) {
 	flights.sort((a, b) => a.fix_est - b.fix_est);
@@ -787,13 +1078,24 @@ function drawBoard(fix) {
 
 	i = 0;
 	efs_html = "";
-	while (i < flight_draw.length) {
-		if (flight_draw[i].dest === "VHHH") {
-			efs_html += drawIB(fix, flight_draw[i]);
-		} else {
-			efs_html += drawOVF(fix, flight_draw[i]);
+	if (exer === "ta") {
+		while (i < flight_draw.length) {
+			if (flight_draw[i].dest === "VHHH") {
+				efs_html += drawIB(fix, flight_draw[i]);
+			} else {
+				efs_html += drawOVF_TA(fix, flight_draw[i]);
+			}
+			i++;
 		}
-		i++;
+	} else {
+		while (i < flight_draw.length) {
+			if (flight_draw[i].dest === "VHHH" || flight_draw[i].dest === "VMMC") {
+				efs_html += drawIB(fix, flight_draw[i]);
+			} else {
+				efs_html += drawOVF_IN(fix, flight_draw[i]);
+			}
+			i++;
+		}
 	}
 	$(bay[fix]).html(efs_html);
 }
