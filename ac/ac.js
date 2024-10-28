@@ -579,7 +579,7 @@ function isMainland(ad) {
 }
 
 function isVHHK(ad) {
-	return ( ad.startsWith("VH") || !ad.startsWith("VM") );
+	return ( ad.startsWith("VH") || ad.startsWith("VM") );
 }
 
 function checkLevel(flight, traffic, traffic_flas) {
