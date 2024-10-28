@@ -28,10 +28,10 @@ dest_list = {
 traffic_dir = {
 	"SIERA": "E",
 	"ASOBA": "W",
-	"DOSUT": "E",
+	"DOSUT": "DSEK",
 	"TAMOT": "W_m",
 	"BEKOL": "E_m",
-	"EPKAL": "W",
+	"EPKAL": "DSEK",
 	"IKELA_in": "E",
 	"IKELA_out": "W",
 	"SIKOU_in": "E_m",
@@ -43,6 +43,7 @@ flas = {
 	"E_m": ["S0570", "S0630", "S0690", "S0750", "S0810", "S0890", "S0950", "S1010", "S1070", "S1130", "S1190", "S1250"],
 	"W": ["120", "140", "160", "180", "200", "220", "240", "260", "280", "300", "320", "340", "360", "380", "400", "430"],
 	"W_m": ["S0600", "S0660", "S0720", "S0780", "S0840", "S0920", "S0980", "S1040", "S1100", "S1160", "S1220"],
+	"DSEK": ["270", "280", "310", "320", "350", "360", "390", "400"]
 }
 
 bay = {
@@ -272,18 +273,16 @@ function resetRules(){
 		};
 
 		separation = [
-			{flow: false, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "20NM"},
-			//{flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "7"},
-			//{flow: true, both: true, dep: "MAINLAND", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "7"},
-			{flow: false, both: false, dep: "", dep_not: "ZGSZ", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "16NM"},
-			{flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "5NM"},
-			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "VHHH", in_fix: "SIERA", out_fix: "", sep: "30NM"},
-			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "ELATO", sep: "10"},
-			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "ENVAR", sep: "10"},
-			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "NOMAN", sep: "10"},
-			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "SABNO", sep: "10"},
-			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "EPKAL", sep: "10"},
-			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "IKELA", sep: "10"},
+			{flow: false, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "", chase: false, sep: "20NM"},
+			{flow: false, both: false, dep: "", dep_not: "ZGSZ", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", chase: false, sep: "16NM"},
+			{flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", chase: false, sep: "5NM"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "VHHH", in_fix: "SIERA", out_fix: "", chase: false, sep: "30NM"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "ELATO", chase: false, sep: "10"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "ENVAR", chase: false, sep: "10"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "NOMAN", chase: false, sep: "10"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "SABNO", chase: false, sep: "10"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "EPKAL", chase: false, sep: "10"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "IKELA", chase: false, sep: "10"},
 
 		];
 	} else if (exer === "wa"){
@@ -304,10 +303,34 @@ function resetRules(){
 		};
 
 		separation = [
-			{flow: false, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "20NM"},
-			//{flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "7"},
-			//{flow: true, both: true, dep: "MAINLAND", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "7"},
-			{flow: false, both: false, dep: "", dep_not: "ZGSZ", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "16NM"},
+			//TAMOT
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "TAMOT", out_fix: "", chase: false, sep: "30NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "TAMOT", out_fix: "ENVAR", chase: false, sep: "50NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "TAMOT", out_fix: "NOMAN", chase: false, sep: "50NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "TAMOT", out_fix: "SABNO", chase: false, sep: "50NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "TAMOT", out_fix: "EPKAL", chase: false, sep: "50NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "TAMOT", out_fix: "IKELA", chase: false, sep: "50NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "TAMOT", out_fix: "SIKOU", chase: false, sep: "50NM"},
+			//SIKOU
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "SIKOU", out_fix: "", chase: false, sep: "20NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIKOU", out_fix: "", chase: true, sep: "40NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "VMMC", dest_not: "", in_fix: "SIKOU", out_fix: "", chase: true, sep: "40NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "SIKOU", out_fix: "NOMAN", chase: true, sep: "40NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "SIKOU", out_fix: "SABNO", chase: true, sep: "40NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "SIKOU", out_fix: "BEKOL", chase: true, sep: "40NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "SIKOU", out_fix: "KAPLI", chase: true, sep: "40NM"},
+			{flow: true, both: true, dep: "ZJSY", dep_not: "", dest: "", dest_not: "VHHK", in_fix: "SIERA", out_fix: "", chase: false, sep: "5"},
+			//IKELA
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "IKELA", out_fix: "", chase: false, sep: "20NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "IKELA", out_fix: "", chase: true, sep: "40NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "VMMC", dest_not: "", in_fix: "IKELA", out_fix: "", chase: true, sep: "40NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "IKELA", out_fix: "DOTMI", chase: true, sep: "40NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "IKELA", out_fix: "ENVAR", chase: true, sep: "40NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "IKELA", out_fix: "KAPLI", chase: true, sep: "40NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "IKELA", out_fix: "BEKOL", chase: true, sep: "40NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "IKELA", out_fix: "LANDA", chase: true, sep: "40NM"},
+			{flow: true, both: true, dep: "ZJSY", dep_not: "", dest: "", dest_not: "VHHK", in_fix: "IKELA", out_fix: "", chase: false, sep: "5"},
+			/*{flow: false, both: false, dep: "", dep_not: "ZGSZ", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "16NM"},
 			{flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "5NM"},
 			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "VHHH", in_fix: "SIERA", out_fix: "", sep: "30NM"},
 			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "ELATO", sep: "10"},
@@ -315,7 +338,7 @@ function resetRules(){
 			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "NOMAN", sep: "10"},
 			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "SABNO", sep: "10"},
 			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "EPKAL", sep: "10"},
-			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "IKELA", sep: "10"},
+			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "IKELA", sep: "10"},*/
 
 		];
 	}
@@ -395,13 +418,13 @@ function startExercise() {
 
 		drawBoard("SIERA");
 	} else if (exer === "wa"){
-		genFlightTime("ASOBA", "in", initTime, 10, 3);
-		genFlightTime("DOSUT", "in", initTime, 3, 5);
+		//genFlightTime("ASOBA", "in", initTime, 10, 3);
+		//genFlightTime("DOSUT", "in", initTime, 3, 5);
 		genFlightTime("TAMOT", "in", initTime, 3, 5);
 		genFlightTime("IKELA", "in", initTime, 3, 10);
 		genFlightTime("SIKOU", "in", initTime, 3, 10);
 
-		drawBoard("DOSUTASOBA");
+		//drawBoard("DOSUTASOBA");
 		drawBoard("TAMOTBEKOL");
 		drawBoard("IKELA");
 		drawBoard("SIKOU");
@@ -555,6 +578,10 @@ function isMainland(ad) {
 	return ( ad.startsWith("Z") && !ad.startsWith("ZK") && !ad.startsWith("ZM") && !ad.startsWith("ZGSZ") );
 }
 
+function isVHHK(ad) {
+	return ( ad.startsWith("VH") || !ad.startsWith("VM") );
+}
+
 function checkLevel(flight, traffic, traffic_flas) {
 	fix = (flight.in_fix===""?flight.out_fix:flight.in_fix);
 	if (!(fix in fatal)) 
@@ -590,12 +617,16 @@ function checkSeparationApply(both, neg, field, data1, data2) {
 		if (both) {
 			if (field === "MAINLAND"){
 				return !isMainland(data1) && !isMainland(data2);
+			} else if (field === "VHHK"){
+				return !isVHHK(data1) && !isVHHK(data2);
 			} else {
 				return field !== data1 && field !== data2;
 			}
 		} else {
 			if (field === "MAINLAND"){
 				return !isMainland(data1) || !isMainland(data2);
+			} else if (field === "VHHK"){
+				return !isVHHK(data1) || !isVHHK(data2);
 			} else {
 				return field !== data1 || field !== data2;
 			}
@@ -604,12 +635,16 @@ function checkSeparationApply(both, neg, field, data1, data2) {
 		if (both) {
 			if (field === "MAINLAND"){
 				return isMainland(data1) && isMainland(data2);
+			} else if (field === "VHHK"){
+				return isVHHK(data1) && isVHHK(data2);
 			} else {
 				return field === data1 && field === data2;
 			}
 		} else {
 			if (field === "MAINLAND"){
 				return isMainland(data1) || isMainland(data2);
+			} else if (field === "MAINLAND"){
+				return isVHHK(data1) || isVHHK(data2);
 			} else {
 				return field === data1 || field === data2;
 			}
@@ -626,7 +661,8 @@ function checkSeparation(flight1, flight2) {
 		checkSeparationApply(r.both, false, r.dest, flight1.dest, flight2.dest) &&
 		checkSeparationApply(r.both, true, r.dest_not, flight1.dest, flight2.dest) &&
 		checkSeparationApply(r.both, false, r.in_fix, flight1.in_fix, flight2.in_fix) &&
-		checkSeparationApply(r.both, false, r.out_fix, flight1.out_fix, flight2.out_fix)
+		checkSeparationApply(r.both, false, r.out_fix, flight1.out_fix, flight2.out_fix) &&
+		(!r.chase || (flight1.speed > flight2.speed && r.chase))
 	);
 
 	required = rules.map(d => d.sep);
@@ -639,7 +675,7 @@ function checkSeparation(flight1, flight2) {
 		if (s.endsWith("NM")){
 			sep = Math.ceil(s.substr(0, s.length-2)/8);
 			if (flight1.fix_est-flight2.fix_est == sep){
-				if (flight1.rbox !== flight2.acid + "+" + s){
+				if (!flight1.rbox.includes(flight2.acid + "+" + s)){
 					fatal[fix].push(flight1.acid + " & " + flight2.acid + " no ensure");
 				}
 			} else if (flight1.fix_est-flight2.fix_est < sep){
@@ -914,6 +950,13 @@ function showLvl(fl){
 	}
 }
 
+function showSpeed(fix, speed){
+	if (["SIKOU", "IKELA", "EPKAL", "DOSUTASOBA"].includes(fix)){
+		return "M"+speed+" ";
+	}
+	return "";
+}
+
 function drawCloak(fix, flight, efs) {
 	efs_html = `<div class="row">`;
 	if (flight.cloak === "") {
@@ -954,7 +997,7 @@ function drawIB(fix, flight) {
                             <div class="col-1 border border-black">${flight.ssr}</div>
                             <div class="col-2 border border-black">${flight.rvsm}</div>
                             <div class="col-2 border border-black">${showTime(flight.fix_est)}</div>
-                            <div class="col-3 border border-black text-start">${flight.rbox}</div>
+                            <div class="col-3 border border-black text-start">${showSpeed(fix,flight.speed)}${flight.rbox}</div>
                             <div class="col-1 border border-black">${flight.dep}</div>
                             <div class="col-1 border border-black" onclick="openRbox('${flight.acid}')">R</div>
                         </div>
@@ -988,7 +1031,7 @@ function drawOVF_TA(fix, flight) {
                             <div class="col-1 border border-black">${flight.ssr}</div>
                             <div class="col-2 border border-black">${flight.rvsm}</div>
                             <div class="col-2 border border-black">${showTime(flight.fix_est)}</div>
-                            <div class="col-4 border border-black text-start">${flight.rbox}</div>
+                            <div class="col-4 border border-black text-start">${showSpeed(fix,flight.speed)}${flight.rbox}</div>
                             <div class="col-1 border border-black" onclick="openRbox('${flight.acid}')">R</div>
                         </div>
                     </div>
@@ -1021,7 +1064,7 @@ function drawOVF_IN(fix, flight) {
 								<div class="col-1 border border-black"></div>
 								<div class="col-1 border border-black">${flight.ssr}</div>
 								<div class="col-2 border border-black">${flight.rvsm}</div>
-								<div class="col-2 border border-black text-info">${(flight.out_fix==='ENVAR'||flight.out_fix==='KAPLI'?showTime(flight.fix_est+45):"")}</div>
+								<div class="col-2 border border-black text-info">${(flight.in_fix==='IKELA'&&(flight.out_fix==='ENVAR'||flight.out_fix==='KAPLI')?showTime(flight.fix_est+45):"")}</div>
 								<div class="col-1 border border-black">${showTime(flight.fix_est)}</div>
 								<div class="col-1 border border-black">${flight.dep}</div>
 								<div class="col-1 border border-black">${flight.dest}</div>
@@ -1054,7 +1097,7 @@ function drawOVF_IN(fix, flight) {
 								<div class="col-1 border border-black">${flight.ssr}</div>
 								<div class="col-2 border border-black">${flight.rvsm}</div>
 								<div class="col-2 border border-black">${showTime(flight.fix_est)}</div>
-								<div class="col-3 border border-black text-start">${flight.rbox}</div>
+								<div class="col-3 border border-black text-start">${showSpeed(fix,flight.speed)}${flight.rbox}</div>
 								<div class="col-1 border border-black">${flight.dest}</div>
 								<div class="col-1 border border-black" onclick="openRbox('${flight.acid}')">R</div>
 							</div>
@@ -1069,6 +1112,12 @@ function drawOVF_IN(fix, flight) {
 }
 
 function drawBoard(fix) {
+	if (fix === "TAMOT" || fix === "BEKOL"){
+		fix = "TAMOTBEKOL";
+	} else if (fix === "DOSUT" || fix === "ASOBA"){
+		fix = "DOSUTASOBA";
+	}
+
 	flights.sort((a, b) => a.fix_est - b.fix_est);
 
 	flight_draw = flights.filter((f) => 
