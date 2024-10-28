@@ -319,7 +319,7 @@ function resetRules(){
 			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "SIKOU", out_fix: "SABNO", chase: true, sep: "40NM"},
 			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "SIKOU", out_fix: "BEKOL", chase: true, sep: "40NM"},
 			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "SIKOU", out_fix: "KAPLI", chase: true, sep: "40NM"},
-			{flow: true, both: true, dep: "ZJSY", dep_not: "", dest: "", dest_not: "VHHK", in_fix: "SIERA", out_fix: "", chase: false, sep: "5"},
+			{flow: true, both: true, dep: "ZJSY", dep_not: "", dest: "", dest_not: "VHHK", in_fix: "SIKOU", out_fix: "", chase: false, sep: "5"},
 			//IKELA
 			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "IKELA", out_fix: "", chase: false, sep: "20NM"},
 			{flow: false, both: true, dep: "", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "IKELA", out_fix: "", chase: true, sep: "40NM"},
