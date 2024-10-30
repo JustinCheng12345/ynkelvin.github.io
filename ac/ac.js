@@ -330,15 +330,14 @@ function resetRules(){
 			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "IKELA", out_fix: "BEKOL", chase: true, sep: "40NM"},
 			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "IKELA", out_fix: "LANDA", chase: true, sep: "40NM"},
 			{flow: true, both: true, dep: "ZJSY", dep_not: "", dest: "", dest_not: "VHHK", in_fix: "IKELA", out_fix: "", chase: false, sep: "5"},
-			/*{flow: false, both: false, dep: "", dep_not: "ZGSZ", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "16NM"},
-			{flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: "5NM"},
-			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "VHHH", in_fix: "SIERA", out_fix: "", sep: "30NM"},
-			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "ELATO", sep: "10"},
-			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "ENVAR", sep: "10"},
-			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "NOMAN", sep: "10"},
-			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "SABNO", sep: "10"},
-			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "EPKAL", sep: "10"},
-			{flow: false, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "IKELA", sep: "10"},*/
+			//ASOBA
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "ASOBA", out_fix: "", chase: true, sep: "10"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "ASOBA", out_fix: "", chase: false, sep: "MNT-"},
+			//DOSUT
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "DOSUT", out_fix: "", chase: false, sep: "20NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "DOSUT", out_fix: "", chase: false, sep: "50NM"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "DOSUT", out_fix: "", chase: false, sep: "MNT-"},
+			{flow: false, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "DOSUT", out_fix: "", chase: true, sep: "MNT+15"},
 
 		];
 	}
@@ -418,13 +417,13 @@ function startExercise() {
 
 		drawBoard("SIERA");
 	} else if (exer === "wa"){
-		//genFlightTime("ASOBA", "in", initTime, 10, 3);
-		//genFlightTime("DOSUT", "in", initTime, 3, 5);
+		genFlightTime("ASOBA", "in", initTime, 10, 3);
+		genFlightTime("DOSUT", "in", initTime, 3, 5);
 		genFlightTime("TAMOT", "in", initTime, 3, 5);
 		genFlightTime("IKELA", "in", initTime, 3, 10);
 		genFlightTime("SIKOU", "in", initTime, 3, 10);
 
-		//drawBoard("DOSUTASOBA");
+		drawBoard("DOSUTASOBA");
 		drawBoard("TAMOTBEKOL");
 		drawBoard("IKELA");
 		drawBoard("SIKOU");
@@ -656,6 +655,7 @@ function checkSeparationApply(both, neg, field, data1, data2) {
 function checkSeparation(flight1, flight2) {
 	const rules = separation.filter((r) => 
 		(r.flow || flight1.fl === flight2.fl) && 
+		(flight1.in_fix === flight2.in_fix) &&
 		checkSeparationApply(r.both, false, r.dep, flight1.dep, flight2.dep) &&
 		checkSeparationApply(r.both, true, r.dep_not, flight1.dep, flight2.dep) &&
 		checkSeparationApply(r.both, false, r.dest, flight1.dest, flight2.dest) &&
@@ -671,25 +671,63 @@ function checkSeparation(flight1, flight2) {
 	if (!(fix in fatal)) 
 		fatal[fix] = [];
 
+	sep = 0;
+	ensure = false;
+
 	required.forEach(s => {
-		if (s.endsWith("NM")){
-			sep = Math.ceil(s.substr(0, s.length-2)/8);
-			if (flight1.fix_est-flight2.fix_est == sep){
-				if (!flight1.rbox.includes(flight2.acid + "+" + s)){
-					fatal[fix].push(flight1.acid + " & " + flight2.acid + " no ensure");
+		if (fix === "DOSUT" || fix === "EPKAL"){
+			if (s === "50NM"){
+				if (flight1.fix_est >= 120 && flight1.fix_est <= 720 && 
+					flight2.fix_est >= 120 && flight2.fix_est <= 720 && 
+					Number(flight1.fl) >= 290 &&
+					!flight1.f18.includes("D") && !flight2.f18.includes("D")){
+						return;
+					}
+				if ((flight1.f18+flight2.f18).includes("D") &&
+					(flight1.f18+flight2.f18).includes("0")){
+					return;
 				}
-			} else if (flight1.fix_est-flight2.fix_est < sep){
-				fatal[fix].push(flight1.acid + " & " + flight2.acid + " not enough separation");
 			}
-		} else {
-			sep = Number(s);
-			if (flight1.fix_est-flight2.fix_est < sep){
-				fatal[fix].push(flight1.acid + " & " + flight2.acid + " not enough separation");
+			if (s === "MNT-"){
+				if ((!flight1.f18.includes("D") && !flight2.f18.includes("D")) ||
+				(!flight1.f18.includes("0") && !flight2.f18.includes("0"))){
+					return;
+				}
 			}
 		}
 
+		if (s.endsWith("NM")){
+			new_sep = Math.ceil(s.substr(0, s.length-2)/8);
+			if (new_sep > sep){
+				sep = new_sep;
+				ensure = true;
+			}
+		} else {
+			let new_sep;
+			if (s === "MNT-") {
+				new_sep = Math.min(Math.max(11-(flight2.speed-flight1.speed), 5),10);
+			} else if (s === "MNT+15") {
+				new_sep = Math.min(Math.max(10+flight1.speed-flight2.speed, 11),15);
+			} else if (s === "MNT+") {
+				new_sep = Math.max(10+flight1.speed-flight2.speed, 11);
+			} else {
+				new_sep = Number(s);
+			}
+
+			if (new_sep > sep){
+				sep = new_sep;
+				ensure = false;
+			}
+		}
 	});
 	
+	if (flight1.fix_est-flight2.fix_est == sep && ensure){
+		if (!flight1.rbox.includes(flight2.acid + "+" + s)){
+			fatal[fix].push(flight1.acid + " & " + flight2.acid + " no ensure");
+		}
+	} else if (flight1.fix_est-flight2.fix_est < sep){
+		fatal[fix].push(flight1.acid + " & " + flight2.acid + " not enough separation");
+	}
 	//console.log(flight1.acid, flight2.acid, rules.map(d => d.sep));
 }
 
@@ -772,7 +810,7 @@ function checkAnswer() {
 	$("#faultModal").modal('hide');
 	if (!($('.modal.in').length)) {
 		$('#faultModal .modal-dialog').css({
-			top: 500,
+			top: 100,
 			left: 300
 		});
 	}
