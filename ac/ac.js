@@ -429,7 +429,8 @@ function startExercise() {
 		drawBoard("SIKOU");
 	}
 
-	showFlow();
+	if (flow.length > 0)
+		showFlow();
 }
 
 function cloak(acid, side, fix) {
