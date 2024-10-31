@@ -722,7 +722,7 @@ function checkSeparation(flight1, flight2) {
 	});
 	
 	if (flight1.fix_est-flight2.fix_est == sep && ensure !== ""){
-		if (!flight1.rbox.includes(flight2.acid + "+" + s)){
+		if (!flight1.rbox.includes(flight2.acid + "+" + ensure)){
 			fatal[fix].push(flight1.acid + " & " + flight2.acid + " no ensure");
 		}
 	} else if (flight1.fix_est-flight2.fix_est < sep){
