@@ -214,7 +214,7 @@ function genFlight(fix, inout, time) {
 					dest = random(dest_list[out_fix]);
 				}
 	
-				dep = random(["VTBS", "ZJSY", "ZJHK", "ZGZJ"]);
+				dep = random(["VTBS", "VTBD", "VTSP", "VIDP", "VVNB", "ZJSY", "ZJHK", "ZGZJ"]);
 	
 				if (dep === "ZJSY"){
 					fl = randomP({ "S0810": 0.35, "S0890": 0.35, "S0840": 0.15, "S1010": 0.15 });					
@@ -292,7 +292,7 @@ function resetRules(){
 			"DS": ["270", "310", "320", "350", "360", "400"],
 			"DS_390": ["270", "310", "320", "350", "360", "390", "400"],
 			"DS_defi": ["270"],
-			"TM": ["S0920", "S0980", "S1040", "S1100", "S1160"],
+			"TM": ["S0840", "S0920", "S0980", "S1040", "S1100", "S1160"],
 			"IK_in": ["270", "290", "330", "370", "410"],
 			"IK_in_390": ["270", "290", "330", "370", "390", "410"],
 			"IK_defi": ["270"],
@@ -672,7 +672,7 @@ function checkSeparation(flight1, flight2) {
 		fatal[fix] = [];
 
 	sep = 0;
-	ensure = false;
+	ensure = "";
 
 	required.forEach(s => {
 		if (fix === "DOSUT" || fix === "EPKAL"){
@@ -700,7 +700,7 @@ function checkSeparation(flight1, flight2) {
 			new_sep = Math.ceil(s.substr(0, s.length-2)/8);
 			if (new_sep > sep){
 				sep = new_sep;
-				ensure = true;
+				ensure = s;
 			}
 		} else {
 			let new_sep;
@@ -716,12 +716,12 @@ function checkSeparation(flight1, flight2) {
 
 			if (new_sep > sep){
 				sep = new_sep;
-				ensure = false;
+				ensure = "";
 			}
 		}
 	});
 	
-	if (flight1.fix_est-flight2.fix_est == sep && ensure){
+	if (flight1.fix_est-flight2.fix_est == sep && ensure !== ""){
 		if (!flight1.rbox.includes(flight2.acid + "+" + s)){
 			fatal[fix].push(flight1.acid + " & " + flight2.acid + " no ensure");
 		}
