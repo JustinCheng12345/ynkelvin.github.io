@@ -946,7 +946,7 @@ function showSTAR(fix, dest) {
 				return "CANTO3A";
 			case "DOSUT":
 			case "ASOBA":
-				return "BETTY2A";
+				return "BETTY3A";
 		}
 	} else {
 		switch(fix) {
