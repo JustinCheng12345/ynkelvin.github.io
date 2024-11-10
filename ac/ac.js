@@ -344,47 +344,92 @@ function resetRules(){
 }
 
 function generateFlow(){
+	flow = [];
 	if (exer === "ta"){
-		nnsb = Math.random() >= 0.3;
-		nnsb_sep = (Math.floor(Math.random() * 10) + 11).toString();
+		if (Math.random() >= 0.3) {
+			nnsn_sep = (Math.floor(Math.random() * 10) + 11).toString();
 
-		ekik = Math.random() >= 0.3;
-		ekik_sep = (Math.floor(Math.random() * 10) + 11).toString();
+			flow.push({text: "SIERA - NOMAN", sep: nnsn_sep, cfs: "", validity:"UFN", remarks: "", active: true});
+			flow.push({text: "SIERA - SABNO", sep: nnsn_sep, cfs: "", validity:"UFN", remarks: "", active: true});
 
-		ldg = Math.random() >= 0.3;
-		ldg_sep = (Math.floor(Math.random() * 5) + 5).toString();
-
-		flow = [
-			{text: "SIERA - NOMAN", sep: nnsb_sep, cfs: "", validity:"UFN", remarks: "", active: nnsb},
-			{text: "SIERA - SABNO", sep: nnsb_sep, cfs: "", validity:"UFN", remarks: "", active: nnsb},
-			{text: "SIERA - EPKAL", sep: ekik_sep, cfs: "", validity:"UFN", remarks: "", active: ekik},
-			{text: "SIERA - IKELA", sep: ekik_sep, cfs: "", validity:"UFN", remarks: "", active: ekik},
-			{text: "SIERA DEP ZXXX LDG VHHH", sep: ldg_sep, cfs: "", validity:"UFN", remarks: "", active: ldg},
-			{text: "SIERA LDG VHHH F190 N/A", sep: "", cfs: "", validity:"UFN", remarks: "", active: ldg},
-			{text: "SIERA OVF VHHK F250 ONLY", sep: "", cfs: "", validity:"UFN", remarks: "", active: ldg},
-		]
-
-		if (nnsb) {
-			separation.push({flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "NOMAN", sep: nnsb_sep});
-			separation.push({flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "SABNO", sep: nnsb_sep});
-			separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "NOMAN", sep: nnsb_sep});
-			separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "SABNO", sep: nnsb_sep});
+			separation.push({flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "NOMAN", sep: nnsn_sep});
+			separation.push({flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "SABNO", sep: nnsn_sep});
+			separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "NOMAN", sep: nnsn_sep});
+			separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "SABNO", sep: nnsn_sep});
 		}
 
-		if (ekik) {
+		if (Math.random() >= 0.3) {
+			ekik_sep = (Math.floor(Math.random() * 10) + 11).toString();
+			
+			flow.push({text: "SIERA - EPKAL L642", sep: ekik_sep, cfs: "", validity:"UFN", remarks: "", active: true});
+			flow.push({text: "SIERA - IKELA", sep: ekik_sep, cfs: "", validity:"UFN", remarks: "", active: true});
+
 			separation.push({flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "EPKAL", sep: ekik_sep});
 			separation.push({flow: true, both: true, dep: "", dep_not: "ZGSZ", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "IKELA", sep: ekik_sep});
 			separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "EPKAL", sep: ekik_sep});
 			separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "SIERA", out_fix: "IKELA", sep: ekik_sep});
 		}
 
-		if (ldg) {
+		if (Math.random() >= 0.3) {
+			ldg_sep = (Math.floor(Math.random() * 5) + 5).toString();
+
+			flow.push({text: "SIERA DEP ZXXX LDG VHHH", sep: ldg_sep, cfs: "", validity:"UFN", remarks: "", active: true});
+			flow.push({text: "SIERA LDG VHHH F190 N/A", sep: "", cfs: "", validity:"UFN", remarks: "", active: true});
+			flow.push({text: "SIERA OVF VHHK F250 ONLY", sep: "", cfs: "", validity:"UFN", remarks: "", active: true});
+
 			separation.push({flow: true, both: true, dep: "MAINLAND", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: ldg_sep});
 			separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "VHHH", dest_not: "", in_fix: "SIERA", out_fix: "", sep: ldg_sep});
 
 			level["SR_VHHH"] = ["210", "230"];
 
 			level["SR_other"] = ["250"];
+		}
+	} else if (exer === "wa"){
+		if (Math.random() >= 0.3) {
+			ikdth_sep = (Math.floor(Math.random() * 2) * 5 + 15).toString();
+			
+			flow.push({text: "IKELA - DOTMI LDG ZSPD,ZSSS,ZSHC,ZSNB", sep: ikdth_sep, cfs: "", validity:"UFN", remarks: "", active: true});
+
+			separation.push({flow: true, both: true, dep: "", dep_not: "", dest: "DTHIGH", dest_not: "", in_fix: "IKELA", out_fix: "DOTMI", sep: ikdth_sep});
+		}
+		if (Math.random() >= 0.3) {
+			dsdth_sep = (Math.floor(Math.random() * 2) * 5 + 15).toString();
+			
+			flow.push({text: "DOSUT - DOTMI LDG ZSPD,ZSSS,ZSHC,ZSNB", sep: dsdth_sep, cfs: "", validity:"UFN", remarks: "", active: true});
+
+			separation.push({flow: true, both: true, dep: "", dep_not: "", dest: "DTHIGH", dest_not: "", in_fix: "DOSUT", out_fix: "DT_HIGH", sep: dsdth_sep});
+		}
+		if (Math.random() >= 0.3) {
+			ikdtl_sep = (Math.floor(Math.random() * 2) * 5 + 15).toString();
+			
+			flow.push({text: "IKELA - DOTMI LDG ZSAM,ZSQZ,ZGMX,ZSFZ", sep: ikdtl_sep, cfs: "", validity:"UFN", remarks: "", active: true});
+
+			separation.push({flow: true, both: true, dep: "", dep_not: "", dest: "DTLOW", dest_not: "", in_fix: "IKELA", out_fix: "DOTMI", sep: ikdtl_sep});
+		}
+		if (Math.random() >= 0.3) {
+			dsdtl_sep = (Math.floor(Math.random() * 2) * 5 + 15).toString();
+			
+			flow.push({text: "DOSUT - DOTMI LDG ZSAM,ZSQZ,ZGMX,ZSFZ", sep: dsdtl_sep, cfs: "", validity:"UFN", remarks: "", active: true});
+
+			separation.push({flow: true, both: true, dep: "", dep_not: "", dest: "DTLOW", dest_not: "", in_fix: "DOSUT", out_fix: "DOTMI", sep: dsdtl_sep});
+		}
+
+		if (Math.random() >= 0.3) {
+			nnsn_sep = (Math.floor(Math.random() * 10) + 10).toString();
+
+			flow.push({text: "TAMOT - NOMAN", sep: nnsn_sep, cfs: "", validity:"UFN", remarks: "", active: true});
+			flow.push({text: "TAMOT - SABNO", sep: nnsn_sep, cfs: "", validity:"UFN", remarks: "", active: true});
+
+			separation.push({flow: true, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "TAMOT", out_fix: "NOMAN", sep: nnsn_sep});
+			separation.push({flow: true, both: true, dep: "", dep_not: "", dest: "", dest_not: "", in_fix: "TAMOT", out_fix: "SABNO", sep: nnsn_sep});
+		}
+
+		if (Math.random() >= 0.3) {
+			ek_sep = (Math.floor(Math.random() * 10) + 10).toString();
+			
+			flow.push({text: "SIERA - EPKAL L642", sep: ek_sep, cfs: "", validity:"UFN", remarks: "", active: true});
+
+			separation.push({flow: true, both: true, dep: "ZGSZ", dep_not: "", dest: "", dest_not: "", in_fix: "TAMOT", out_fix: "EPKAL", sep: ek_sep});
 		}
 	}
 }
@@ -574,13 +619,20 @@ function updateRbox(closeModal) {
 	}
 }
 
-function isMainland(ad) {
-	return ( ad.startsWith("Z") && !ad.startsWith("ZK") && !ad.startsWith("ZM") && !ad.startsWith("ZGSZ") );
+function isSpecialAd(ad, flow) {
+	if (flow === "MAINLAND")
+		return ( ad.startsWith("Z") && !ad.startsWith("ZK") && !ad.startsWith("ZM") && !ad.startsWith("ZGSZ") );
+
+	if (flow === "VHHK")
+		return ( ad.startsWith("VH") || ad.startsWith("VM") );
+
+	if (flow === "DTHIGH")
+		return ( ad.startsWith("ZSPD") || ad.startsWith("ZSSS") || ad.startsWith("ZSHC") || ad.startsWith("ZSNB") );
+
+	if (flow === "DTLOW")
+		return ( ad.startsWith("ZSAM") || ad.startsWith("ZSQZ") || ad.startsWith("ZGMX") || ad.startsWith("ZSFZ") );
 }
 
-function isVHHK(ad) {
-	return ( ad.startsWith("VH") || ad.startsWith("VM") );
-}
 
 function checkLevel(flight, traffic, traffic_flas) {
 	fix = (flight.in_fix===""?flight.out_fix:flight.in_fix);
@@ -615,36 +667,28 @@ function checkSeparationApply(both, neg, field, data1, data2) {
 	if (field === "") return true;
 	if (neg) {
 		if (both) {
-			if (field === "MAINLAND"){
-				return !isMainland(data1) && !isMainland(data2);
-			} else if (field === "VHHK"){
-				return !isVHHK(data1) && !isVHHK(data2);
+			if (field === "MAINLAND" || field === "VHHK" || field === "DTHIGH" || field === "DTLOW"){
+				return !isSpecialAd(data1, field) && !isSpecialAd(data2, field);
 			} else {
 				return field !== data1 && field !== data2;
 			}
 		} else {
-			if (field === "MAINLAND"){
-				return !isMainland(data1) || !isMainland(data2);
-			} else if (field === "VHHK"){
-				return !isVHHK(data1) || !isVHHK(data2);
+			if (field === "MAINLAND" || field === "VHHK" || field === "DTHIGH" || field === "DTLOW"){
+				return !isSpecialAd(data1, field) || !isSpecialAd(data2, field);
 			} else {
 				return field !== data1 || field !== data2;
 			}
 		}
 	} else {
 		if (both) {
-			if (field === "MAINLAND"){
-				return isMainland(data1) && isMainland(data2);
-			} else if (field === "VHHK"){
-				return isVHHK(data1) && isVHHK(data2);
+			if (field === "MAINLAND" || field === "VHHK" || field === "DTHIGH" || field === "DTLOW"){
+				return isSpecialAd(data1, field) && isSpecialAd(data2, field);
 			} else {
 				return field === data1 && field === data2;
 			}
 		} else {
-			if (field === "MAINLAND"){
-				return isMainland(data1) || isMainland(data2);
-			} else if (field === "MAINLAND"){
-				return isVHHK(data1) || isVHHK(data2);
+			if (field === "MAINLAND" || field === "VHHK" || field === "DTHIGH" || field === "DTLOW"){
+				return isSpecialAd(data1, field) || isSpecialAd(data2, field);
 			} else {
 				return field === data1 || field === data2;
 			}
