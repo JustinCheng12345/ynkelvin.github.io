@@ -1,7 +1,7 @@
 keyPressed = {};
 
 // Generate EFS
-callsign = ["ABL", "AIQ", "APG", "AXM", "BAV", "BGB", "CAL", "CCA", "CHH", "CPA", "CQH", "CRK", "CSC", "CSN", "CSS", "CSZ", "CTJ", "CTV", "CXA", "EVA", "GIA", "GLP", "HGB", "HKC", "HKE", "HVN", "HZS", "JAL", "JCC", "JJA", "JNA", "KAL", "KME", "KMI", "KXP", "LHA", "LNI", "MGL", "MKR", "MYU", "NEP", "PAL", "QTR", "RBA", "RLH", "SJX", "SLK", "SWM", "TGW", "TTW", "TVJ", "UAE", "UPS", "WCM"];
+callsign = ["AAR", "ABL", "ABW", "AIQ", "ALK", "AMU", "APG", "ATG", "AXM", "BAV", "BGB", "BOX", "BWJ", "CAL", "CBJ", "CCA", "CDC", "CEB", "CHH", "CMA", "CPA", "CQH", "CRK", "CSC", "CSH", "CSN", "CSS", "CSZ", "CTJ", "CTV", "CXA", "DHK", "DKH", "ESR", "ETD", "ETH", "EVA", "FDX", "GEC", "GIA", "GLP", "HGB", "HKC", "HKE", "HKG", "HLF", "HVN", "HZS", "IGO", "JAL", "JCC", "JJA", "JNA", "JSA", "KAL", "KLM", "KME", "KMI", "KXP", "LHA", "LKE", "LNI", "MAS", "MGL", "MKR", "MSR", "MXD", "MYU", "NCR", "NEP", "PAL", "PIC", "QTR", "RBA", "RLH", "RMY", "RYL", "SAG", "SIA", "SJX", "SLK", "SVW", "SWM", "TGW", "THA", "THD", "TLM", "TTW", "TVJ", "TWB", "TWY", "UAE", "UPS", "VJC", "WCM", "XAX"];
 
 //level_SR = { "110": 0.01, "120": 0.29, "170": 0.05, "190": 0.1, "210": 0.1, "230": 0.2, "250": 0.2, "270": 0.05 };
 //level_LD = { "A090": 0.1, "F110": 0.9 };
