@@ -102,6 +102,8 @@ acft_m = {
 
 flights = [];
 
+let interval;
+
 const randomP = items => {
 	const { min, random } = Math,
 		commonMultiplier = 100,
@@ -160,7 +162,7 @@ function genFlight(fix, inout, time) {
 			break;
 
 		case "DOSUT":
-			out_fix = randomP({ "": 0.2, "DOTMI": 0.5, "SIKOU": 0.1, "BEKOL": 0.2 });
+			out_fix = randomP({ "": 0.1, "DOTMI": 0.6, "SIKOU": 0.1, "BEKOL": 0.2 });
 
 			if (out_fix === "") {
 				dest = "VHHH";
@@ -435,7 +437,7 @@ function generateFlow(){
 }
 
 function genFlightTime(fix, inout, initTime, timediff, num) {	
-	times = [initTime + 15];
+	times = [initTime + 10 + Math.floor(Math.random() * 10)];
 
 	for (i = 0; i < num - 1; i++) {
 		times.push(Number(times.slice(-1)) + Math.floor(Math.random() * timediff) + 1);
@@ -455,16 +457,23 @@ function startExercise() {
 	flights = [];
 
 	initTime = Math.floor(Math.random() * 1340);
-	$("#clock").html(`<span class="fs-5">${showTime(initTime)}</span>00`)
+	
+	totalSeconds = initTime * 60;
+	clearInterval(interval);
+	interval = setInterval(() => {
+		totalSeconds++;
+		const cTime = new Date(totalSeconds * 1000).toISOString();
+		$("#clock").html(`<span class="fs-5">${cTime.substring(11, 13)}${cTime.substring(14, 16)}</span>${cTime.substring(17, 19)}`)
+	}, 1000);
 
 	if (exer === "ta"){
 		genFlightTime("SIERA", "in", initTime, 5, 10);
 
 		drawBoard("SIERA");
 	} else if (exer === "wa"){
-		genFlightTime("ASOBA", "in", initTime, 10, 3);
-		genFlightTime("DOSUT", "in", initTime, 3, 5);
-		genFlightTime("TAMOT", "in", initTime, 3, 5);
+		genFlightTime("ASOBA", "in", initTime, 10, 2);
+		genFlightTime("DOSUT", "in", initTime, 3, 6);
+		genFlightTime("TAMOT", "in", initTime, 3, 6);
 		genFlightTime("IKELA", "in", initTime, 3, 10);
 		genFlightTime("SIKOU", "in", initTime, 3, 10);
 
