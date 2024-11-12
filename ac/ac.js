@@ -189,9 +189,9 @@ function genFlight(fix, inout, time) {
 		case "IKELA":
 			if (inout === "in"){
 				if (time <= 14 || time >= 975){
-					out_fix = randomP({ "": 0.2, "DOTMI": 0.3, "ENVAR": 0.3, "KAPLI": 0.05, "BEKOL": 0.1, "LANDA": 0.05 });
+					out_fix = randomP({ "": 0.2, "DOTMI": 0.3, "ENVAR": 0.35, "KAPLI": 0.00, "BEKOL": 0.1, "LANDA": 0.05 });
 				} else {
-					out_fix = randomP({ "": 0.2, "DOTMI": 0.3, "ENVAR": 0.05, "KAPLI": 0.3, "BEKOL": 0.1, "LANDA": 0.05 });
+					out_fix = randomP({ "": 0.2, "DOTMI": 0.3, "ENVAR": 0.00, "KAPLI": 0.35, "BEKOL": 0.1, "LANDA": 0.05 });
 				}
 				if (out_fix === "") {
 					dest = random(["VHHH", "VMMC"]);
@@ -234,9 +234,11 @@ function genFlight(fix, inout, time) {
 	field18 = "";
 
 	if (["IKELA","EPKAL","DOSUT"].includes(fix)){
-		field18 += randomP({ "W": 0.05, "": 0.95 });
-		field18 += randomP({ "D": 0.05, "": 0.95 });
-		field18 += randomP({ "0": 0.05, "": 0.95 });
+		field18 += randomP({ "W": 0.1, "": 0.9 });
+		field18 += randomP({ "D": 0.1, "": 0.9 });
+		if (fix !== "IKELA" || out_fix === "" || out_fix === "BEKOL"){
+			field18 += randomP({ "0": 0.1, "": 0.9 });
+		}
 	}
 
 	flight = {
