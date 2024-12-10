@@ -401,7 +401,7 @@ function generateFlow(){
 			
 			flow.push({text: "DOSUT - DOTMI LDG ZSPD,ZSSS,ZSHC,ZSNB", sep: dsdth_sep, cfs: "", validity:"UFN", remarks: "", active: true});
 
-			separation.push({flow: true, both: true, dep: "", dep_not: "", dest: "DTHIGH", dest_not: "", in_fix: "DOSUT", out_fix: "DT_HIGH", sep: dsdth_sep});
+			separation.push({flow: true, both: true, dep: "", dep_not: "", dest: "DTHIGH", dest_not: "", in_fix: "DOSUT", out_fix: "DOTMI", sep: dsdth_sep});
 		}
 		if (Math.random() >= 0.3) {
 			ikdtl_sep = (Math.floor(Math.random() * 2) * 5 + 15).toString();
