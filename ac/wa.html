@@ -256,7 +256,7 @@
 							<div class="input-group input-group-sm mb-3">
 								<span class="input-group-text">SSR</span>
 								<input type="text" class="form-control" aria-label="SSR"
-									aria-describedby="inputGroup-sizing-sm" maxlength="4" id="ssr" tabindex="3" oninput="this.value = this.value.replace(/[^0-9]/g, '');" disabled readonly>
+									aria-describedby="inputGroup-sizing-sm" maxlength="4" id="ssr" tabindex="-1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" disabled readonly>
 							</div>
 						</div>
 						<div class="col mb-3">
@@ -276,7 +276,7 @@
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" tabindex="-1" onclick="updateTransfer(true)">OK</button>
+					<button type="button" class="btn btn-primary" tabindex="3" onclick="updateTransfer(true)">OK</button>
 					<button type="button" class="btn btn-primary" tabindex="-1" onclick="updateTransfer(false)">Apply</button>
 					<button type="button" class="btn btn-secondary" tabindex="-1" data-bs-dismiss="modal">Cancel</button>
 				</div>
