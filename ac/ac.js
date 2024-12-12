@@ -259,7 +259,8 @@ function genFlight(fix, inout, time) {
 		rbox: "",
 		f18: field18,
 		cloak: "",
-		timepage: false
+		timepage: false,
+		checked: "new-EFS"
 	};
 
 	pending_flights.push(flight);
@@ -479,7 +480,7 @@ function startExercise() {
 
 	initTime = Math.floor(Math.random() * 1340);
 	cTime = initTime;
-	
+
 	totalSeconds = initTime * 60;
 	clearInterval(clockInterval);
 	clockInterval = setInterval(() => {
@@ -529,6 +530,13 @@ function clickACID(acid) {
 	} else {
 		$("#footer_acid").val(acid);
 	}
+	active_flights.find((o, i) => {
+		if (o.acid === acid) {
+			active_flights[i].checked = "checked-EFS";
+			drawBoard(active_flights[i].in_fix);
+			return true; // stop searching
+		}
+	});
 }
 
 function openTransfer() {
@@ -1102,7 +1110,7 @@ function drawIB(fix, flight) {
                 <div class="card-body">
                     <div class="container">
                         <div class="row">
-                            <div class="col-3 border border-black fs-5" onclick="clickACID('${flight.acid}')">${flight.acid}</div>
+                            <div class="col-3 border border-black fs-5 ${flight.checked}" onclick="clickACID('${flight.acid}')">${flight.acid}</div>
                             <div class="col-2 border border-black fs-5 bg-opacity-50 ${flight.fl_light}" onclick="lightup('${flight.acid}', '${fix}')">${showLvl(flight.fl)}</div>
                             <div class="col-2 border border-black">${flight.in_fix}</div>
                             <div class="col-3 border border-black text-start">${showSTAR(flight.in_fix, flight.dest)}</div>
@@ -1135,7 +1143,7 @@ function drawOVF_TA(fix, flight) {
                 <div class="card-body">
                     <div class="container">
                         <div class="row">
-                            <div class="col-3 border border-black fs-5" onclick="clickACID('${flight.acid}')">${flight.acid}</div>
+                            <div class="col-3 border border-black fs-5 ${flight.checked}" onclick="clickACID('${flight.acid}')">${flight.acid}</div>
                             <div class="col-2 border border-black fs-5 bg-opacity-50 ${flight.fl_light}" onclick="lightup('${flight.acid}', '${fix}')">${showLvl(flight.fl)}</div>
                             <div class="col-2 border border-black">${flight.in_fix}</div>
                             <div class="col-2 border border-black text-start"></div>
@@ -1169,7 +1177,7 @@ function drawOVF_IN(fix, flight) {
 					<div class="card-body">
 						<div class="container">
 							<div class="row">
-								<div class="col-3 border border-black fs-5" onclick="clickACID('${flight.acid}')">${flight.acid}</div>
+								<div class="col-3 border border-black fs-5 ${flight.checked}" onclick="clickACID('${flight.acid}')">${flight.acid}</div>
 								<div class="col-2 border border-black fs-5 bg-opacity-50 ${flight.fl_light}" onclick="lightup('${flight.acid}', '${fix}')" oncontextmenu="flip('${flight.acid}', '${fix}');return false;">${showLvl(flight.fl)}</div>
 								<div class="col-2 border border-black"></div>
 								<div class="col-2 border border-black text-start"></div>
@@ -1201,7 +1209,7 @@ function drawOVF_IN(fix, flight) {
 					<div class="card-body">
 						<div class="container">
 							<div class="row">
-								<div class="col-3 border border-black fs-5" onclick="clickACID('${flight.acid}')">${flight.acid}</div>
+								<div class="col-3 border border-black fs-5 ${flight.checked}" onclick="clickACID('${flight.acid}')">${flight.acid}</div>
 								<div class="col-2 border border-black fs-5 bg-opacity-50 ${flight.fl_light}" onclick="lightup('${flight.acid}', '${fix}')" oncontextmenu="flip('${flight.acid}', '${fix}');return false;">${showLvl(flight.fl)}</div>
 								<div class="col-2 border border-black">${flight.in_fix}</div>
 								<div class="col-2 border border-black text-start"></div>
