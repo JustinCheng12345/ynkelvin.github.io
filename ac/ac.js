@@ -260,7 +260,7 @@ function genFlight(fix, inout, time) {
 		f18: field18,
 		cloak: "",
 		timepage: false,
-		checked: "new-EFS"
+		checked: "green-EFS"
 	};
 
 	pending_flights.push(flight);
@@ -478,30 +478,24 @@ function startExercise() {
 	active_flights = [];
 	pending_flights = [];
 
-	initTime = Math.floor(Math.random() * 1340);
-	cTime = initTime;
-
-	totalSeconds = initTime * 60;
-	clearInterval(clockInterval);
-	clockInterval = setInterval(() => {
-		totalSeconds++;
-		const cTimeSec = new Date(totalSeconds * 1000).toISOString();
-		$("#clock").html(`<span class="fs-5">${cTimeSec.substring(11, 13)}${cTimeSec.substring(14, 16)}</span>${cTimeSec.substring(17, 19)}`)
-	}, 1000);
+	cTime = Math.floor(Math.random() * 1340);
 
 	if (exer === "ta"){
-		genFlightTime("SIERA", "in", initTime, 5, 10);
+		genFlightTime("SIERA", "in", cTime, 5, 10);
 		active_flights = pending_flights;
 
 		drawBoard("SIERA");
 	} else if (exer === "wa"){
-		genFlightTime("ASOBA", "in", initTime, 10, 2);
-		genFlightTime("DOSUT", "in", initTime, 3, 8);
-		genFlightTime("TAMOT", "in", initTime, 3, 8);
-		genFlightTime("IKELA", "in", initTime, 3, 12);
-		genFlightTime("SIKOU", "in", initTime, 3, 12);
+		genFlightTime("ASOBA", "in", cTime, 10, 2);
+		genFlightTime("DOSUT", "in", cTime, 3, 8);
+		genFlightTime("TAMOT", "in", cTime, 3, 8);
+		genFlightTime("IKELA", "in", cTime, 3, 12);
+		genFlightTime("SIKOU", "in", cTime, 3, 12);
 
-		popFlights()
+		while (active_flights.length < 5) {
+			cTime++;
+			popFlights();
+		}
 
 		clearInterval(flightInterval);
 		flightInterval = setInterval(() => {
@@ -509,6 +503,14 @@ function startExercise() {
 			popFlights()
 		}, 60000);
 	}
+
+	totalSeconds = cTime * 60;
+	clearInterval(clockInterval);
+	clockInterval = setInterval(() => {
+		totalSeconds++;
+		const cTimeSec = new Date(totalSeconds * 1000).toISOString();
+		$("#clock").html(`<span class="fs-5">${cTimeSec.substring(11, 13)}${cTimeSec.substring(14, 16)}</span>${cTimeSec.substring(17, 19)}`)
+	}, 1000);
 
 	if (flow.length > 0)
 		showFlow();
@@ -532,7 +534,7 @@ function clickACID(acid) {
 	}
 	active_flights.find((o, i) => {
 		if (o.acid === acid) {
-			active_flights[i].checked = "checked-EFS";
+			active_flights[i].checked = "salmon-EFS";
 			drawBoard(active_flights[i].in_fix);
 			return true; // stop searching
 		}
