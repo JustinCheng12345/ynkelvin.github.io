@@ -100,9 +100,11 @@ acft_m = {
 	"CL60" : [75]
 };
 
-flights = [];
+active_flights = [];
+pending_flights = [];
 
-let interval;
+let clockInterval;
+let flightInterval;
 
 const randomP = items => {
 	const { min, random } = Math,
@@ -260,7 +262,7 @@ function genFlight(fix, inout, time) {
 		timepage: false
 	};
 
-	flights.push(flight);
+	pending_flights.push(flight);
 
 }
 
@@ -439,7 +441,7 @@ function generateFlow(){
 }
 
 function genFlightTime(fix, inout, initTime, timediff, num) {	
-	times = [initTime + 10 + Math.floor(Math.random() * 10)];
+	times = [initTime + 5 + Math.floor(Math.random() * 10)];
 
 	for (i = 0; i < num - 1; i++) {
 		times.push(Number(times.slice(-1)) + Math.floor(Math.random() * timediff) + 1);
@@ -450,39 +452,61 @@ function genFlightTime(fix, inout, initTime, timediff, num) {
 	});
 }
 
+function popFlights() {
+	for (let i = pending_flights.length - 1; i >= 0; i--) {
+		if (pending_flights[i].fix_est <= cTime + 12 && pending_flights[i].in_fix !== "TAMOT") {
+			active_flights.push(pending_flights[i]);
+			pending_flights.splice(i, 1);
+		} else if (pending_flights[i].fix_est <= cTime + 7) {
+			active_flights.push(pending_flights[i]);
+			pending_flights.splice(i, 1);
+		}
+	}
+	drawBoard("DOSUTASOBA");
+	drawBoard("TAMOTBEKOL");
+	drawBoard("IKELA");
+	drawBoard("SIKOU");
+}
+
 function startExercise() {
 
 	resetRules();
 
 	generateFlow();
 
-	flights = [];
+	active_flights = [];
+	pending_flights = [];
 
 	initTime = Math.floor(Math.random() * 1340);
+	cTime = initTime;
 	
 	totalSeconds = initTime * 60;
-	clearInterval(interval);
-	interval = setInterval(() => {
+	clearInterval(clockInterval);
+	clockInterval = setInterval(() => {
 		totalSeconds++;
-		const cTime = new Date(totalSeconds * 1000).toISOString();
-		$("#clock").html(`<span class="fs-5">${cTime.substring(11, 13)}${cTime.substring(14, 16)}</span>${cTime.substring(17, 19)}`)
+		const cTimeSec = new Date(totalSeconds * 1000).toISOString();
+		$("#clock").html(`<span class="fs-5">${cTimeSec.substring(11, 13)}${cTimeSec.substring(14, 16)}</span>${cTimeSec.substring(17, 19)}`)
 	}, 1000);
 
 	if (exer === "ta"){
 		genFlightTime("SIERA", "in", initTime, 5, 10);
+		active_flights = pending_flights;
 
 		drawBoard("SIERA");
 	} else if (exer === "wa"){
 		genFlightTime("ASOBA", "in", initTime, 10, 2);
-		genFlightTime("DOSUT", "in", initTime, 3, 6);
-		genFlightTime("TAMOT", "in", initTime, 3, 6);
-		genFlightTime("IKELA", "in", initTime, 3, 10);
-		genFlightTime("SIKOU", "in", initTime, 3, 10);
+		genFlightTime("DOSUT", "in", initTime, 3, 8);
+		genFlightTime("TAMOT", "in", initTime, 3, 8);
+		genFlightTime("IKELA", "in", initTime, 3, 12);
+		genFlightTime("SIKOU", "in", initTime, 3, 12);
 
-		drawBoard("DOSUTASOBA");
-		drawBoard("TAMOTBEKOL");
-		drawBoard("IKELA");
-		drawBoard("SIKOU");
+		popFlights()
+
+		clearInterval(flightInterval);
+		flightInterval = setInterval(() => {
+			cTime++;
+			popFlights()
+		}, 60000);
 	}
 
 	if (flow.length > 0)
@@ -490,9 +514,9 @@ function startExercise() {
 }
 
 function cloak(acid, side, fix) {
-	flights.find((o, i) => {
+	active_flights.find((o, i) => {
 		if (o.acid === acid) {
-			flights[i].cloak = side;
+			active_flights[i].cloak = side;
 			return true; // stop searching
 		}
 	});
@@ -526,7 +550,7 @@ function openTransfer() {
 
 function openRbox(acid) {
 
-	flight = flights.find( (item) => (item.acid==acid) );
+	flight = active_flights.find( (item) => (item.acid==acid) );
 	rbox = flight?flight.rbox:"";
 
 	$("#rboxModal #rboxModalLabel").html(`Annotation - ${acid}`);
@@ -548,17 +572,17 @@ function openRbox(acid) {
 }
 
 function lightup(acid, fix) {
-	flights.find((o, i) => {
+	active_flights.find((o, i) => {
 		if (o.acid === acid) {
-			switch (flights[i].fl_light) {
+			switch (active_flights[i].fl_light) {
 				case "":
-					flights[i].fl_light = "bg-warning";
+					active_flights[i].fl_light = "bg-warning";
 					break;
 				case "bg-warning":
-					flights[i].fl_light = "bg-danger";
+					active_flights[i].fl_light = "bg-danger";
 					break;
 				case "bg-danger":
-					flights[i].fl_light = "";
+					active_flights[i].fl_light = "";
 					break;
 			}
 			return true; // stop searching
@@ -568,9 +592,9 @@ function lightup(acid, fix) {
 }
 
 function flip(acid, fix) {
-	flights.find((o, i) => {
+	active_flights.find((o, i) => {
 		if (o.acid === acid) {
-			flights[i].timepage = !flights[i].timepage;
+			active_flights[i].timepage = !active_flights[i].timepage;
 
 			return true; // stop searching
 		}
@@ -590,11 +614,11 @@ function updateTransfer(closeModal) {
 		time = Number(timeInput.substr(0,2)) * 60 + Number(timeInput.substr(2,2));
 		ftl = ftlInput.replace("F", "");
 
-		flights.find((o, i) => {
+		active_flights.find((o, i) => {
 			if (o.acid === acidInput) {
-				flights[i].fix_est = time;
-				flights[i].fl = ftl;
-				fix = flights[i].in_fix;
+				active_flights[i].fix_est = time;
+				active_flights[i].fl = ftl;
+				fix = active_flights[i].in_fix;
 				return true; // stop searching
 			}
 		});
@@ -615,10 +639,10 @@ function updateRbox(closeModal) {
 	const acidInput = $('#rboxModal #acid').val();
 	const rboxInput = $('#rboxModal #rbox').val();
 	
-	flights.find((o, i) => {
+	active_flights.find((o, i) => {
 		if (o.acid === acidInput) {
-			flights[i].rbox = rboxInput;
-			fix = flights[i].in_fix;
+			active_flights[i].rbox = rboxInput;
+			fix = active_flights[i].in_fix;
 			return true; // stop searching
 		}
 	});
@@ -790,7 +814,7 @@ function checkSeparation(flight1, flight2) {
 function checkAnswer() {
 	fatal = {};
 
-	flights.forEach(flight => {
+	active_flights.forEach(flight => {
 		switch(flight.in_fix){
 			case "SIERA":
 				if (flight.dep === "ZGSZ") {
@@ -839,9 +863,9 @@ function checkAnswer() {
 		}
 	});
 
-	for (let i = 1; i < flights.length; i++) {
+	for (let i = 1; i < active_flights.length; i++) {
 		for (let j = i-1; j >= 0; j--) {
-			checkSeparation(flights[i], flights[j]);
+			checkSeparation(active_flights[i], active_flights[j]);
 		}
 	}
 
@@ -1212,9 +1236,9 @@ function drawBoard(fix) {
 		fix = "DOSUTASOBA";
 	}
 
-	flights.sort((a, b) => a.fix_est - b.fix_est);
+	active_flights.sort((a, b) => a.fix_est - b.fix_est);
 
-	flight_draw = flights.filter((f) => 
+	flight_draw = active_flights.filter((f) =>
 		((fix.startsWith(f.in_fix) || fix.endsWith(f.in_fix)) || 
 		((fix.startsWith(f.out_fix) || fix.endsWith(f.out_fix)) && f.in_fix === ""))
 	); //update select logic
@@ -1255,7 +1279,7 @@ $( document ).ready(function() {
 			//const acid = button.getAttribute('data-bs-acid');
 			acid = $("#footer_acid").val();
 
-			flight = flights.find( (item) => (item.acid==acid) );
+			flight = active_flights.find( (item) => (item.acid==acid) );
 			ssr = flight?flight.ssr:"";
 			time = flight?showTime(flight.fix_est):"";
 			ftl = flight?flight.fl:"";
