@@ -152,6 +152,7 @@ function random(items) {
 
 
 function genFlight(fix, inout, time) {
+	rte=""
 	switch (fix) {
 		case "SIERA":
 			out_fix = randomP({ "": 0.3, "ENVAR": 0.1, "NOMAN": 0.15, "SABNO": 0.15, "EPKAL": 0.15, "IKELA": 0.15 });
@@ -597,6 +598,7 @@ function startExercise() {
 		let outflight = active_flights.length;
 
 		while (active_flights.length < 4 + outflight) {
+			cTime++;
 			showActiveFlight();
 		}
 
