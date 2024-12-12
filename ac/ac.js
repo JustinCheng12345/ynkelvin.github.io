@@ -551,7 +551,6 @@ function checkTransferred(flight) {
 }
 
 function showActiveFlight() {
-	cTime++;
 	for (let i = pending_flights.length - 1; i >= 0; i--) {
 		if (checkTransferred(pending_flights[i])){
 			active_flights.push(pending_flights[i]);
@@ -602,6 +601,7 @@ function startExercise() {
 
 		clearInterval(flightInterval);
 		flightInterval = setInterval(() => {
+			cTime++;
 			showActiveFlight();
 		}, 60000);
 	}
