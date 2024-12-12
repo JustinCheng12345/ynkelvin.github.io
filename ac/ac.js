@@ -192,6 +192,8 @@ function genFlight(fix, inout, time) {
 			dep = random(["ZGGG"]);
 
 			fl = randomP({ "S0890": 0.15, "S0950": 0.15, "S1010": 0.15, "S1070": 0.15, "S1100": 0.05, "S1130": 0.1, "S1190": 0.1, "S1250": 0.5 });
+
+			rte = ext_rte[dest] === undefined ? "" : ext_rte[dest];
 			break;
 
 		case "DOSUT":
@@ -282,6 +284,7 @@ function genFlight(fix, inout, time) {
 				} else {
 					fl = randomP({ "S0840": 0.05, "S0920": 0.2, "S0950": 0.05, "S0980": 0.15, "S1040": 0.15, "S1100": 0.15, "S1160": 0.15, "S1220": 0.1 });
 				}
+				rte = ext_rte[dest] === undefined ? "" : ext_rte[dest];
 			}
 			break;
 	}
@@ -297,8 +300,6 @@ function genFlight(fix, inout, time) {
 			field18 += randomP({ "0": 0.1, "": 0.9 });
 		}
 	}
-
-	rte = ext_rte[dest] === undefined ? "" : ext_rte[dest];
 
 	flight = {
 		acid: random(callsign) + Math.floor(Math.random() * 10000),
