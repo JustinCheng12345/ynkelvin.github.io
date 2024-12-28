@@ -378,7 +378,7 @@ function resetRules(){
 			"SI_in_ovf": ["S1010", "S1070", "S1130", "S1190", "S1250"],
 			"SI_in_ZJSY": ["S0810", "S0890"],
 			"SI_in_ZJHKZGZJ": ["S0570"],
-			"SI_A202": ["S1040", "S1160", "S120"],
+			"SI_A202": ["S1040", "S1160", "S1220"],
 			"SI_R339": ["S0980", "S1040", "S1100", "S1160", "S1220"],
 			"SI_out_ZJSY": ["S0840"],
 			"SI_out_ZGBHZGNN": ["S0720", "S0780"],
@@ -1003,7 +1003,7 @@ function checkAnswer() {
 					}
 					break;
 				case "SIKOU":
-					if (flight.dest === "ZJHK" || flight.dest === "ZJZJ") {
+					if (flight.dest === "ZJHK" || flight.dest === "ZGZJ") {
 						checkLevel(flight, "SI_out_ZJHKZGZJ", "SIKOU_out");
 					} else if (flight.dest === "ZJQH") {
 						checkLevel(flight, "SI_out_ZJQH", "SIKOU_out");
